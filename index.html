@@ -33,18 +33,19 @@ button,input,textarea{font-family:inherit}
 <template id="__bundler_thumbnail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="#1428E6"></rect><text x="50" y="64" font-family="Arial,sans-serif" font-size="40" font-weight="700" fill="#fff" text-anchor="middle">A</text></svg></template>
 
 <nav onMouseLeave="{{ closeMega }}" style="position:fixed;top:0;left:0;right:0;z-index:60;background:rgba(251,251,253,0.82);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);border-bottom:1px solid rgba(0,0,0,0.08)">
-  <div style="max-width:1024px;margin:0 auto;padding:0 22px;height:52px;display:flex;align-items:center;justify-content:space-between;gap:20px">
+  <div style="max-width:1280px;margin:0 auto;padding:0 clamp(22px,3vw,40px);height:52px;display:flex;align-items:center;justify-content:space-between;gap:20px">
     <a href="#top" onClick="{{ go.home }}" style="display:flex;align-items:center;gap:10px;text-decoration:none">
       <img src="assets/logo-ppt.png" alt="AMICOGEN" style="height:22px;display:block">
     </a>
     <sc-if value="{{ isDesktop }}" hint-placeholder-val="{{ true }}">
-      <div style="display:flex;gap:30px;font-size:13px;white-space:nowrap;align-items:center">
+      <div style="display:flex;gap:clamp(14px,2vw,28px);font-size:13px;white-space:nowrap;align-items:center">
         <a href="#cmo" onMouseEnter="{{ openMegaSvc }}" onClick="{{ go.cmo }}" style="color:#1d1d1f;opacity:{{ upO }};padding:16px 0">{{ t.navUp }}</a>
         <a href="#catalog" onMouseEnter="{{ openMegaCat }}" onClick="{{ cat.cho }}" style="color:#1d1d1f;opacity:{{ catO }};padding:16px 0">{{ t.navMedia }}</a>
         <a href="#cellcipient" onMouseEnter="{{ closeMega }}" onClick="{{ go.cellc }}" style="color:#1d1d1f;opacity:{{ ccO }};padding:16px 0">Cellcipient®</a>
         <a href="#downstream" onMouseEnter="{{ openMegaDsp }}" onClick="{{ go.proa }}" style="color:#1d1d1f;opacity:{{ dspO }};padding:16px 0">{{ t.navDown }}</a>
         <a href="#facility" onMouseEnter="{{ closeMega }}" onClick="{{ go.facility }}" style="color:#1d1d1f;opacity:0.85;padding:16px 0">{{ t.navFac }}</a>
         <a href="#contact" onMouseEnter="{{ closeMega }}" onClick="{{ go.contact }}" style="color:#1d1d1f;opacity:0.85;padding:16px 0">{{ t.navContact }}</a>
+        <a href="#press" onMouseEnter="{{ closeMega }}" onClick="{{ go.press }}" style="color:#1d1d1f;opacity:{{ prO }};padding:16px 0">{{ navPress }}</a>
       </div>
     </sc-if>
     <div style="display:flex;align-items:center;gap:8px">
@@ -53,8 +54,8 @@ button,input,textarea{font-family:inherit}
       </button>
       <sc-if value="{{ isMobile }}" hint-placeholder-val="{{ false }}">
         <button onClick="{{ toggleMenu }}" aria-label="Menu" style="width:44px;height:44px;border:0;background:transparent;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px">
-          <span style="width:17px;height:1.2px;background:#1d1d1f;display:block"></span>
-          <span style="width:17px;height:1.2px;background:#1d1d1f;display:block"></span>
+          <span style="width:17px;height:1.2px;background:#1d1d1f;display:block;transform:{{ mb.l1 }};transition:transform 0.4s cubic-bezier(0.4,0,0.2,1)"></span>
+          <span style="width:17px;height:1.2px;background:#1d1d1f;display:block;transform:{{ mb.l2 }};transition:transform 0.4s cubic-bezier(0.4,0,0.2,1)"></span>
         </button>
       </sc-if>
     </div>
@@ -74,29 +75,44 @@ button,input,textarea{font-family:inherit}
       </div>
     </div>
   </sc-if>
-  <sc-if value="{{ showMenu }}" hint-placeholder-val="{{ false }}">
-    <div style="padding:16px 44px 36px;display:flex;flex-direction:column;gap:4px;background:#fbfbfd">
-      <a href="#cmo" onClick="{{ go.cmo }}" style="color:#1d1d1f;font-size:28px;font-weight:600;padding:8px 0">{{ t.navUp }}</a>
+  <sc-if value="{{ isMobile }}" hint-placeholder-val="{{ false }}">
+    <div style="position:absolute;left:0;right:0;top:100%;height:calc(100dvh - 52px);background:#fbfbfd;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;clip-path:{{ mb.clip }};pointer-events:{{ mb.pe }};visibility:{{ mb.vis }};transition:clip-path 0.5s cubic-bezier(0.4,0,0.2,1),visibility 0s linear {{ mb.visD }}">
+      <div style="padding:16px 44px 60px;display:flex;flex-direction:column;gap:4px">
+      <div style="opacity:{{ mb.o }};transform:translateY({{ mb.y }});transition:opacity 0.4s ease {{ mb.d0 }},transform 0.5s cubic-bezier(0.25,0.1,0.25,1) {{ mb.d0 }};display:flex;flex-direction:column">
+        <a href="#cmo" onClick="{{ go.cmo }}" style="color:#1d1d1f;font-size:28px;font-weight:600;padding:8px 0">{{ t.navUp }}</a>
       <div style="display:flex;flex-direction:column;gap:2px;padding:0 0 10px 2px">
         <sc-for list="{{ megaMain }}" as="mm" hint-placeholder-count="3">
           <a href="#cmo" onClick="{{ mm.onClick }}" style="color:#424245;font-size:17px;padding:8px 0">{{ mm.label }}</a>
         </sc-for>
       </div>
-      <a href="#catalog" onClick="{{ cat.cho }}" style="color:#1d1d1f;font-size:28px;font-weight:600;padding:8px 0">{{ t.navMedia }}</a>
+      </div>
+      <div style="opacity:{{ mb.o }};transform:translateY({{ mb.y }});transition:opacity 0.4s ease {{ mb.d1 }},transform 0.5s cubic-bezier(0.25,0.1,0.25,1) {{ mb.d1 }};display:flex;flex-direction:column">
+        <a href="#catalog" onClick="{{ cat.cho }}" style="color:#1d1d1f;font-size:28px;font-weight:600;padding:8px 0">{{ t.navMedia }}</a>
       <div style="display:flex;flex-direction:column;gap:2px;padding:0 0 10px 2px">
         <sc-for list="{{ catMain }}" as="mm" hint-placeholder-count="4">
           <a href="#catalog" onClick="{{ mm.onClick }}" style="color:#424245;font-size:17px;padding:8px 0">{{ mm.label }}</a>
         </sc-for>
       </div>
-      <a href="#cellcipient" onClick="{{ go.cellc }}" style="color:#1d1d1f;font-size:28px;font-weight:600;padding:8px 0">Cellcipient®</a>
-      <a href="#downstream" onClick="{{ go.proa }}" style="color:#1d1d1f;font-size:28px;font-weight:600;padding:8px 0">{{ t.navDown }}</a>
+      </div>
+      <div style="opacity:{{ mb.o }};transform:translateY({{ mb.y }});transition:opacity 0.4s ease {{ mb.d2 }},transform 0.5s cubic-bezier(0.25,0.1,0.25,1) {{ mb.d2 }};display:flex;flex-direction:column">
+        <a href="#cellcipient" onClick="{{ go.cellc }}" style="color:#1d1d1f;font-size:28px;font-weight:600;padding:8px 0">Cellcipient®</a>
+      </div>
+      <div style="opacity:{{ mb.o }};transform:translateY({{ mb.y }});transition:opacity 0.4s ease {{ mb.d3 }},transform 0.5s cubic-bezier(0.25,0.1,0.25,1) {{ mb.d3 }};display:flex;flex-direction:column">
+        <a href="#downstream" onClick="{{ go.proa }}" style="color:#1d1d1f;font-size:28px;font-weight:600;padding:8px 0">{{ t.navDown }}</a>
       <div style="display:flex;flex-direction:column;gap:2px;padding:0 0 10px 2px">
         <sc-for list="{{ dspMain }}" as="mm" hint-placeholder-count="4">
           <a href="#downstream" onClick="{{ mm.onClick }}" style="color:#424245;font-size:17px;padding:8px 0">{{ mm.label }}</a>
         </sc-for>
       </div>
-      <a href="#facility" onClick="{{ go.facility }}" style="color:#1d1d1f;font-size:28px;font-weight:600;padding:8px 0">{{ t.navFac }}</a>
-      <a href="#contact" onClick="{{ go.contact }}" style="color:#1d1d1f;font-size:28px;font-weight:600;padding:8px 0">{{ t.navContact }}</a>
+      </div>
+      <div style="opacity:{{ mb.o }};transform:translateY({{ mb.y }});transition:opacity 0.4s ease {{ mb.d4 }},transform 0.5s cubic-bezier(0.25,0.1,0.25,1) {{ mb.d4 }};display:flex;flex-direction:column">
+        <a href="#facility" onClick="{{ go.facility }}" style="color:#1d1d1f;font-size:28px;font-weight:600;padding:8px 0">{{ t.navFac }}</a>
+      </div>
+      <div style="opacity:{{ mb.o }};transform:translateY({{ mb.y }});transition:opacity 0.4s ease {{ mb.d5 }},transform 0.5s cubic-bezier(0.25,0.1,0.25,1) {{ mb.d5 }};display:flex;flex-direction:column">
+        <a href="#contact" onClick="{{ go.contact }}" style="color:#1d1d1f;font-size:28px;font-weight:600;padding:8px 0">{{ t.navContact }}</a>
+        <a href="#press" onClick="{{ go.press }}" style="color:#1d1d1f;font-size:28px;font-weight:600;padding:8px 0">{{ navPress }}</a>
+      </div>
+      </div>
     </div>
   </sc-if>
 </nav>
@@ -869,6 +885,90 @@ button,input,textarea{font-family:inherit}
     </div>
   </section>
 </sc-if>
+<sc-if value="{{ isPress }}" hint-placeholder-val="{{ false }}">
+  <section data-screen-label="Press" style="background:#fff;padding:clamp(56px,8vw,100px) 22px clamp(80px,10vw,140px)">
+    <div style="max-width:1024px;margin:0 auto">
+      <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap">
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <span style="font-size:13px;font-weight:600;color:#5A8A00;letter-spacing:0.04em">NEWSROOM</span>
+          <h1 style="margin:0;font-size:clamp(40px,6vw,72px);line-height:1.04;letter-spacing:-0.035em;font-weight:700">{{ pr.title }}</h1>
+          <p style="margin:6px 0 0;font-size:clamp(17px,1.8vw,21px);color:#6e6e73;line-height:1.5">{{ pr.sub }}</p>
+        </div>
+        <sc-if value="{{ pr.isAdmin }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+            <span style="font-size:13px;font-weight:600;color:#fff;background:#1d1d1f;padding:6px 12px;border-radius:980px">ADMIN</span>
+            <button type="button" onClick="{{ pr.logout }}" style="background:#fff;color:#1428E6;border:1px solid #1428E6;padding:11px 20px;border-radius:980px;font-size:15px;cursor:pointer;white-space:nowrap">{{ pr.lLogout }}</button>
+          </div>
+        </sc-if>
+      </div>
+      <sc-if value="{{ pr.isAdmin }}" hint-placeholder-val="{{ false }}">
+        <form onSubmit="{{ pr.add }}" style="background:rgba(255,255,255,0.72);backdrop-filter:blur(24px) saturate(160%);-webkit-backdrop-filter:blur(24px) saturate(160%);border:1px solid rgba(20,40,230,0.09);box-shadow:inset 0 1px 0 rgba(255,255,255,1),0 1px 2px rgba(15,30,120,0.05),0 18px 48px -22px rgba(15,30,120,0.22);border-radius:22px;padding:clamp(22px,3vw,36px);margin-top:36px;display:flex;flex-direction:column;gap:12px">
+          <span style="font-size:20px;font-weight:700;letter-spacing:-0.02em">{{ pr.lNew }}</span>
+          <input name="title" required placeholder="{{ pr.fTitle }}" style="height:48px;border:1px solid #d2d2d7;border-radius:12px;padding:0 14px;font-size:16px;outline:none;background:rgba(255,255,255,0.8);color:#1d1d1f;width:100%;box-sizing:border-box">
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px">
+            <input name="outlet" required placeholder="{{ pr.fOutlet }}" style="height:48px;border:1px solid #d2d2d7;border-radius:12px;padding:0 14px;font-size:16px;outline:none;background:rgba(255,255,255,0.8);color:#1d1d1f;width:100%;box-sizing:border-box">
+            <input name="date" type="date" required style="height:48px;border:1px solid #d2d2d7;border-radius:12px;padding:0 14px;font-size:16px;outline:none;background:rgba(255,255,255,0.8);color:#1d1d1f;width:100%;box-sizing:border-box">
+          </div>
+          <input name="url" type="url" placeholder="{{ pr.fUrl }}" style="height:48px;border:1px solid #d2d2d7;border-radius:12px;padding:0 14px;font-size:16px;outline:none;background:rgba(255,255,255,0.8);color:#1d1d1f;width:100%;box-sizing:border-box">
+          <textarea name="summary" rows="3" placeholder="{{ pr.fSummary }}" style="border:1px solid #d2d2d7;border-radius:12px;padding:14px;font-size:16px;outline:none;resize:vertical;color:#1d1d1f;background:rgba(255,255,255,0.8)"></textarea>
+          <label style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;font-size:14px;color:#424245;cursor:pointer">
+            <span style="background:#fff;color:#1428E6;border:1px solid #1428E6;padding:11px 20px;border-radius:980px;font-size:15px;cursor:pointer;white-space:nowrap">{{ pr.fImg }}</span>
+            <input type="file" accept="image/*" onChange="{{ pr.onImg }}" style="display:none">
+            <span>{{ pr.imgName }}</span>
+          </label>
+          <div style="display:flex;justify-content:flex-end"><button type="submit" style="background:#1428E6;color:#fff;border:0;padding:12px 22px;border-radius:980px;font-size:15px;cursor:pointer;white-space:nowrap">{{ pr.lAdd }}</button></div>
+        </form>
+        <div style="background:rgba(255,255,255,0.72);backdrop-filter:blur(24px) saturate(160%);-webkit-backdrop-filter:blur(24px) saturate(160%);border:1px solid rgba(20,40,230,0.09);box-shadow:inset 0 1px 0 rgba(255,255,255,1),0 1px 2px rgba(15,30,120,0.05),0 18px 48px -22px rgba(15,30,120,0.22);border-radius:22px;padding:clamp(20px,3vw,28px);margin-top:12px;display:flex;flex-direction:column;gap:14px">
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+            <span style="display:flex;flex-direction:column;gap:4px"><span style="font-size:17px;font-weight:700">{{ pr.lPublish }}</span><span style="font-size:13px;color:{{ pr.stC }}">{{ pr.status }}</span></span>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <button type="button" onClick="{{ pr.download }}" style="background:#fff;color:#1428E6;border:1px solid #1428E6;padding:11px 20px;border-radius:980px;font-size:15px;cursor:pointer;white-space:nowrap">{{ pr.lDownload }}</button>
+              <button type="button" onClick="{{ pr.publish }}" style="background:#1428E6;color:#fff;border:0;padding:12px 22px;border-radius:980px;font-size:15px;cursor:pointer;white-space:nowrap">{{ pr.lPub }}</button>
+            </div>
+          </div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+            <input type="password" placeholder="{{ pr.fToken }}" value="{{ pr.token }}" onChange="{{ pr.onToken }}" style="height:48px;border:1px solid #d2d2d7;border-radius:12px;padding:0 14px;font-size:16px;outline:none;background:rgba(255,255,255,0.8);color:#1d1d1f;width:100%;box-sizing:border-box;flex:1 1 260px;height:42px;font-size:14px">
+          </div>
+          <span style="font-size:12px;color:#86868b;line-height:1.6">{{ pr.tokenHelp }}</span>
+        </div>
+      </sc-if>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:16px;margin-top:clamp(36px,5vw,56px)">
+        <sc-for list="{{ pr.items }}" as="it" hint-placeholder-count="0">
+          <div data-reveal="1" style="background:rgba(255,255,255,0.72);backdrop-filter:blur(24px) saturate(160%);-webkit-backdrop-filter:blur(24px) saturate(160%);border:1px solid rgba(20,40,230,0.09);box-shadow:inset 0 1px 0 rgba(255,255,255,1),0 1px 2px rgba(15,30,120,0.05),0 18px 48px -22px rgba(15,30,120,0.22);border-radius:22px;overflow:hidden;display:flex;flex-direction:column">
+            <sc-if value="{{ it.img }}" hint-placeholder-val="{{ false }}"><div style="aspect-ratio:16/9;background:#F2F4FB center/cover no-repeat;background-image:url({{ it.img }})"></div></sc-if>
+            <div style="padding:22px 22px 24px;display:flex;flex-direction:column;gap:8px;flex:1">
+              <span style="font-size:12px;color:#6e6e73">{{ it.outlet }} · {{ it.date }}</span>
+              <span style="font-size:18px;font-weight:700;letter-spacing:-0.02em;line-height:1.35">{{ it.title }}</span>
+              <span style="font-size:14px;line-height:1.6;color:#424245">{{ it.summary }}</span>
+              <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:auto;padding-top:10px">
+                <sc-if value="{{ it.url }}" hint-placeholder-val="{{ false }}"><a href="{{ it.url }}" target="_blank" rel="noopener" style="font-size:14px">{{ pr.lRead }} ›</a></sc-if>
+                <sc-if value="{{ pr.isAdmin }}" hint-placeholder-val="{{ false }}"><button type="button" onClick="{{ it.onDel }}" style="border:0;background:transparent;color:#B3165E;font-size:13px;cursor:pointer;padding:6px 0;margin-left:auto">{{ pr.lDel }}</button></sc-if>
+              </div>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+      <sc-if value="{{ pr.empty }}" hint-placeholder-val="{{ true }}">
+        <div style="background:rgba(255,255,255,0.72);backdrop-filter:blur(24px) saturate(160%);-webkit-backdrop-filter:blur(24px) saturate(160%);border:1px solid rgba(20,40,230,0.09);box-shadow:inset 0 1px 0 rgba(255,255,255,1),0 1px 2px rgba(15,30,120,0.05),0 18px 48px -22px rgba(15,30,120,0.22);border-radius:22px;padding:56px 24px;text-align:center;color:#6e6e73;font-size:16px">{{ pr.lEmpty }}</div>
+      </sc-if>
+      <sc-if value="{{ pr.notAdmin }}" hint-placeholder-val="{{ true }}">
+        <div style="margin-top:48px;text-align:center"><button type="button" onClick="{{ pr.openLogin }}" style="border:0;background:transparent;color:#86868b;font-size:12px;cursor:pointer;padding:8px">{{ pr.lAdminLogin }}</button></div>
+      </sc-if>
+    </div>
+  </section>
+</sc-if>
+<sc-if value="{{ pr.showLogin }}" hint-placeholder-val="{{ false }}">
+  <div onClick="{{ pr.closeLogin }}" style="position:fixed;inset:0;z-index:100;background:rgba(242,244,251,0.5);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);display:flex;align-items:center;justify-content:center;padding:22px">
+    <form onSubmit="{{ pr.login }}" onClick="{{ pr.stop }}" style="background:rgba(255,255,255,0.72);backdrop-filter:blur(24px) saturate(160%);-webkit-backdrop-filter:blur(24px) saturate(160%);border:1px solid rgba(20,40,230,0.09);box-shadow:inset 0 1px 0 rgba(255,255,255,1),0 1px 2px rgba(15,30,120,0.05),0 18px 48px -22px rgba(15,30,120,0.22);background:rgba(255,255,255,0.92);border-radius:24px;padding:36px 32px;width:100%;max-width:380px;display:flex;flex-direction:column;gap:12px">
+      <img src="assets/logo-ppt.png" alt="AMICOGEN" style="height:22px;align-self:flex-start;margin-bottom:8px">
+      <span style="font-size:24px;font-weight:700;letter-spacing:-0.02em">{{ pr.lLoginTitle }}</span>
+      <input name="id" required autocomplete="username" placeholder="{{ pr.fId }}" style="height:48px;border:1px solid #d2d2d7;border-radius:12px;padding:0 14px;font-size:16px;outline:none;background:rgba(255,255,255,0.8);color:#1d1d1f;width:100%;box-sizing:border-box">
+      <input name="pw" type="password" required autocomplete="current-password" placeholder="{{ pr.fPw }}" style="height:48px;border:1px solid #d2d2d7;border-radius:12px;padding:0 14px;font-size:16px;outline:none;background:rgba(255,255,255,0.8);color:#1d1d1f;width:100%;box-sizing:border-box">
+      <sc-if value="{{ pr.loginErr }}" hint-placeholder-val="{{ false }}"><span style="font-size:13px;color:#B3165E">{{ pr.lLoginErr }}</span></sc-if>
+      <button type="submit" style="background:#1428E6;color:#fff;border:0;padding:12px 22px;border-radius:980px;font-size:15px;cursor:pointer;white-space:nowrap;height:48px;border-radius:12px;margin-top:6px">{{ pr.lLogin }}</button>
+    </form>
+  </div>
+</sc-if>
 <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
   <section data-screen-label="Hero" style="background:#fff;text-align:center;padding:clamp(56px,9vw,110px) 22px 0;overflow:hidden">
     <div style="font-size:clamp(17px,1.8vw,21px);font-weight:600;color:#1428E6;margin-bottom:10px">Amicogen Bioprocess</div>
@@ -953,7 +1053,10 @@ button,input,textarea{font-family:inherit}
     <div style="font-size:clamp(17px,1.8vw,21px);font-weight:600;color:#C6F04A">{{ t.cellKicker }}</div>
     <div data-scrub="word" style="font-size:clamp(56px,11vw,140px);font-weight:700;letter-spacing:-0.05em;line-height:1;margin-top:12px">Cellcipient<sup style="font-size:0.28em;font-weight:500;vertical-align:top;position:relative;top:0.35em;margin-left:0.06em;letter-spacing:0">®</sup></div>
     <p style="margin:26px auto 0;max-width:620px;font-size:clamp(19px,2.2vw,26px);line-height:1.4;color:#DCE1FF;text-wrap:balance">{{ t.cellDesc }}</p>
-    <a href="#cellcipient" onClick="{{ go.cellc }}" style="display:inline-block;margin-top:28px;font-size:17px;color:#fff;text-decoration:underline;text-underline-offset:4px">{{ t.cellCta }} ›</a>
+    <div style="display:flex;justify-content:center;flex-wrap:wrap;gap:12px 32px;margin-top:28px;align-items:center">
+        <a href="#cellcipient" onClick="{{ go.cellc }}" style="font-size:17px;color:#fff;text-decoration:underline;text-underline-offset:4px">{{ t.cellCta }} ›</a>
+        <span style="display:flex;align-items:center;gap:8px;font-size:17px;color:rgba(255,255,255,0.75)">Cellcipient® Vero Max<span style="font-size:11px;font-weight:600;letter-spacing:0.04em;color:#1428E6;background:#C6F04A;padding:3px 8px;border-radius:980px">COMING SOON</span></span>
+      </div>
   </section>
 
   <section id="downstream" data-screen-label="Downstream" style="background:#fff;padding:clamp(72px,10vw,130px) 0 12px;scroll-margin-top:52px">
@@ -1067,7 +1170,7 @@ const T = {
     tileDown:'순도를 높이다.', tileDownSub:'Protein A 레진, 정제 버퍼, Denarase®.',
     upTitle:'배지에 관한 모든 것.\n한 곳에서.', upSub:'세포주에 맞춘 개발, 소규모 제조, GMP 위탁생산, 정밀분석까지\n배양 공정의 전 단계를 지원합니다.',
     mediaKicker:'아미코젠 배지', mediaTitle:'고객의 소중한 세포에 꼭 맞는 배지.', quote:'샘플 및 견적 문의',
-    cellKicker:'세포배양배지 전용 첨가제', cellDesc:'쓰던 배지 그대로. 성장과 생산성은 한 단계 위로.', cellCta:'Cellcipient® 알아보기',
+    cellKicker:'세포배양배지 전용 첨가제', cellDesc:'쓰던 배지 그대로. 성장과 생산성은 한 단계 위로.', cellCta:'Cellcipient® NAG 알아보기',
     downTitle:'더 깨끗하게. 더 안정적으로.', downSub:'항체 포획부터 버퍼 공급, 핵산 불순물 제거까지 다운스트림 공정을 단순하게.',
     inquire:'문의하기',
     facKicker:'아미코젠 송도 세포배양배지 센터', facTitle:'바이오의약품의 안정적인 생산,\n송도에서 지원합니다.', facSub:'GMP 기준의 청정 환경에서 칭량부터 블렌딩, 충진, 포장까지. 한결같은 품질의 배지를 제때 공급합니다.',
@@ -1084,7 +1187,7 @@ const T = {
     tileDown:'Built for purity.', tileDownSub:'Protein A resins, buffers and Denarase®.',
     upTitle:'Everything media.\nAll in one place.', upSub:'Custom development, small-scale batches, GMP contract manufacturing and analysis — across every step of upstream.',
     mediaKicker:'Amicogen Media', mediaTitle:'Media made for your precious cells.', quote:'Request samples & quote',
-    cellKicker:'Cell culture media supplements', cellDesc:'Keep your medium. Lift growth and productivity.', cellCta:'Ask about Cellcipient®',
+    cellKicker:'Cell culture media supplements', cellDesc:'Keep your medium. Lift growth and productivity.', cellCta:'Explore Cellcipient® NAG',
     downTitle:'Cleaner. More robust.', downSub:'From antibody capture to buffer supply and nucleic-acid clearance, downstream made simpler.',
     inquire:'Inquire',
     facKicker:'Amicogen Songdo Cell Culture Media Center', facTitle:'Supporting stable biologics production,\nfrom Songdo.', facSub:'From weighing to blending, filling and packaging in GMP clean environments — consistent media, delivered on time.',
@@ -1105,8 +1208,8 @@ const MEDIA = {
   en:[['CHO','CHO Cell Medium','Optimized for antibody and recombinant protein production in CHO cells.',['Serum-free','Chemically defined','Fed-batch']],['Vero','Vero Cell Medium','For Vero cell culture in vaccine and virus production.',['Vaccine','Adherent','Serum-free']],['MSC','MSC Medium','Supports expansion and characteristics of mesenchymal stem cells.',['Cell therapy','Expansion','Phenotype']],['Basal','Basal Media','Standard basal media incl. DMEM, RPMI 1640, MEM-α, IMDM, DMEM/F12.',['Powder','Liquid','Standard']],['Custom','Custom Basal Media','Basal media adjusted to your component and packaging specs.',['Components','Packaging','Small lots']]]
 };
 const DOWNS = {
-  ko:[['PROTEIN A RESIN','Protein A 레진','Puriose® ProA HP','균일한 고다공성 아가로스 비드로 높은 동적 결합능과 빠른 유속을 함께 구현합니다.'],['ALKALINE-STABLE PROTEIN A','HiPure A 레진','HipureA™ Cycloid','첫 캡처 단계에서 HCP를 크게 낮춰 폴리싱 공정을 줄여줍니다.'],['ENZYME · 국내 공식 유통','Denarase®','Impurity Engineering Enzyme','모든 형태의 DNA · RNA를 분해해 불순물 제거 공정을 단순화합니다.'],['SERVICE','정제 버퍼 제조 지원','바로 쓰는 버퍼','공정 사양에 맞춘 버퍼를 제조 · 공급해 준비 부담을 덜어드립니다.']],
-  en:[['PROTEIN A RESIN','Protein A Resin','Puriose® ProA HP','Uniform super-porous agarose beads deliver high dynamic binding capacity and fast flow.'],['ALKALINE-STABLE PROTEIN A','HiPure A Resin','HipureA™ Cycloid','Drastically reduces HCPs at the first capture step, cutting polishing steps.'],['ENZYME · Official distributor in Korea','Denarase®','Impurity Engineering Enzyme','Degrades all forms of DNA and RNA to simplify impurity clearance.'],['SERVICE','Purification Buffer Support','Ready-to-use buffers','Buffers made to your process spec, cutting on-site preparation.']]
+  ko:[['PROTEIN A RESIN','Protein A 레진','Puriose® ProA HP','균일한 고다공성 아가로스 비드로 높은 동적 결합능과 빠른 유속을 함께 구현합니다.'],['ALKALINE-STABLE PROTEIN A','HiPure A 레진','HipureA™ Cycloid','첫 캡처 단계에서 HCP를 크게 낮춰 폴리싱 공정을 줄여줍니다.'],['c-LEcta 국내 공식 유통','Denarase®','Impurity Engineering Enzyme','모든 형태의 DNA · RNA를 분해해 불순물 제거 공정을 단순화합니다.'],['SERVICE','정제 버퍼 제조 지원','바로 쓰는 버퍼','공정 사양에 맞춘 버퍼를 제조 · 공급해 준비 부담을 덜어드립니다.']],
+  en:[['PROTEIN A RESIN','Protein A Resin','Puriose® ProA HP','Uniform super-porous agarose beads deliver high dynamic binding capacity and fast flow.'],['ALKALINE-STABLE PROTEIN A','HiPure A Resin','HipureA™ Cycloid','Drastically reduces HCPs at the first capture step, cutting polishing steps.'],['c-LEcta · Official distributor in Korea','Denarase®','Impurity Engineering Enzyme','Degrades all forms of DNA and RNA to simplify impurity clearance.'],['SERVICE','Purification Buffer Support','Ready-to-use buffers','Buffers made to your process spec, cutting on-site preparation.']]
 };
 const PAGES = {
   cmo:{img:'assets/gmp1.png', ko:{name:'배지 CMO 서비스', kicker:'Media CMO Service', title:'고객의 배합 그대로.\nGMP 품질로.', sub:'상업 규모 GMP 생산부터 Pre-GMP 소규모 제조까지 단계에 맞춰 위탁 생산합니다.',
@@ -1367,12 +1470,12 @@ const AREAS = {ko:['배지 CMO','맞춤형 배지','기초배지','기초배지 
 const DSTYLE = [
   {bg:'#fff',fg:'#1d1d1f',kc:'#1428E6',dc:'#424245',lc:'#1428E6'},
   {bg:'#fff',fg:'#1d1d1f',kc:'#5A8A00',dc:'#424245',lc:'#1428E6'},
-  {bg:'#fff',fg:'#1d1d1f',kc:'#5A8A00',dc:'#424245',lc:'#1428E6'},
+  {bg:'#fff',fg:'#1d1d1f',kc:'#B3165E',dc:'#424245',lc:'#B3165E'},
   {bg:'#fff',fg:'#1d1d1f',kc:'#1428E6',dc:'#424245',lc:'#1428E6'}
 ];
 
 class Component extends DCLogic {
-  state = { lang: this.props.defaultLang ?? 'ko', w: typeof window !== 'undefined' ? window.innerWidth : 1280, menu:false, m:0, sent:false, areas:{}, page:null, mega:null, fam:'all', pSent:false, pTypes:{}, pProducts:{} };
+  state = { press:[], admin: typeof sessionStorage !== 'undefined' && sessionStorage.getItem('ag_admin')==='1', showLogin:false, loginErr:false, pImg:null, pImgName:'', ghToken: typeof localStorage !== 'undefined' ? (localStorage.getItem('ag_gh_token') || '') : '', pStatus:'', pStC:'#86868b', lang: this.props.defaultLang ?? 'ko', w: typeof window !== 'undefined' ? window.innerWidth : 1280, menu:false, m:0, sent:false, areas:{}, page:null, mega:null, fam:'all', pSent:false, pTypes:{}, pProducts:{} };
   _top(id){ const el = id && document.getElementById(id); window.scrollTo({top: el ? el.getBoundingClientRect().top + window.scrollY - (this.state.page ? 112 : 52) : 0, behavior: el ? 'smooth' : 'auto'}); }
   openPage(p, sub, extra){ return (e) => { e && e.preventDefault(); this.setState({page:p, mega:null, menu:false, ...(extra||{})}, () => setTimeout(() => this._top(sub), sub ? 60 : 0)); }; }
   goContact(idx){ return (e) => { e && e.preventDefault(); this.setState({page:null, mega:null, menu:false, sent:false, areas: idx == null ? this.state.areas : {[idx]:true}}, () => setTimeout(() => this._top('contact'), 60)); }; }
@@ -1393,8 +1496,33 @@ class Component extends DCLogic {
     this.setState(type === 'partner' ? {pSent:true} : {sent:true});
     window.location.href = href;
   }
+  _pressJson(){ return JSON.stringify(this.state.press, null, 2); }
+  _pressAdd(e){ e.preventDefault(); const f = e.target, v = n => (f.elements[n] && f.elements[n].value || '').trim();
+    const item = {id: Date.now(), title: v('title'), outlet: v('outlet'), date: v('date'), url: v('url'), summary: v('summary'), img: this.state.pImg || ''};
+    const press = [item, ...this.state.press].sort((a,b) => (b.date||'').localeCompare(a.date||''));
+    f.reset(); this.setState({press, pImg:null, pImgName:'', pStatus: this.state.lang==='ko' ? '게시 전 변경사항이 있습니다.' : 'Unpublished changes.', pStC:'#B3165E'}); }
+  _pressImg(e){ const file = e.target.files && e.target.files[0]; if (!file) return; const rd = new FileReader();
+    rd.onload = () => { const im = new Image(); im.onload = () => { const W = Math.min(1200, im.width), H = Math.round(im.height * W / im.width); const c = document.createElement('canvas'); c.width = W; c.height = H; c.getContext('2d').drawImage(im, 0, 0, W, H); this.setState({pImg: c.toDataURL('image/jpeg', 0.8), pImgName: file.name}); }; im.src = rd.result; };
+    rd.readAsDataURL(file); }
+  async _pressPublish(){ const ko = this.state.lang==='ko', tk = this.state.ghToken.trim();
+    if (!tk) { this.setState({pStatus: ko ? 'GitHub 토큰을 입력하세요. (또는 press.json 다운로드 후 직접 업로드)' : 'Enter a GitHub token, or download press.json and upload it.', pStC:'#B3165E'}); return; }
+    const api = 'https://api.github.com/repos/qasolutionmain-web/agbioprocess-homepage/contents/press.json', hd = {Authorization: 'Bearer ' + tk, Accept: 'application/vnd.github+json'};
+    this.setState({pStatus: ko ? '게시 중…' : 'Publishing…', pStC:'#86868b'});
+    try { let sha; const g = await fetch(api, {headers: hd}); if (g.ok) sha = (await g.json()).sha;
+      const content = btoa(unescape(encodeURIComponent(this._pressJson())));
+      const p = await fetch(api, {method:'PUT', headers: hd, body: JSON.stringify({message: 'Update press.json', content, sha})});
+      if (!p.ok) throw new Error(p.status);
+      this.setState({pStatus: ko ? '게시 완료 · 1~2분 뒤 사이트에 반영됩니다.' : 'Published · live in 1–2 minutes.', pStC:'#5A8A00'});
+    } catch (err) { this.setState({pStatus: (ko ? '게시 실패 · 토큰 권한을 확인하세요. ' : 'Publish failed · check token permissions. ') + err.message, pStC:'#B3165E'}); } }
+  _pressDownload(){ const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([this._pressJson()], {type:'application/json'})); a.download = 'press.json'; a.click(); }
+  async _login(e){ e.preventDefault(); const f = e.target; const s = f.elements.id.value.trim() + ':' + f.elements.pw.value;
+    const d = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(s)); const hx = [...new Uint8Array(d)].map(x => x.toString(16).padStart(2,'0')).join('');
+    if (hx === 'db7921ab82b56db1f9762a3b3511509d7488bafb13f25a8a9dc53394bd6ad2aa') { sessionStorage.setItem('ag_admin','1'); this.setState({admin:true, showLogin:false, loginErr:false, page:'press'}); }
+    else this.setState({loginErr:true}); }
   goHome(id){ return (e) => { e && e.preventDefault(); this.setState({page:null, mega:null, menu:false}, () => setTimeout(() => this._top(id), 60)); }; }
   componentDidMount(){
+    fetch('press.json?t=' + Date.now()).then(r => r.ok ? r.json() : []).then(d => Array.isArray(d) && this.setState({press:d})).catch(() => {});
+    if (location.hash === '#admin') this.setState({page:'press', showLogin: !this.state.admin});
     this._r = () => this.setState({w: window.innerWidth}); window.addEventListener('resize', this._r);
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     const ease = 'cubic-bezier(0.25,0.1,0.25,1)';
@@ -1421,10 +1549,13 @@ class Component extends DCLogic {
     this._sc = () => { if (!this._raf) this._raf = requestAnimationFrame(scrub); };
     window.addEventListener('scroll', this._sc, {passive:true}); scrub();
   }
-  componentWillUnmount(){ window.removeEventListener('resize', this._r); window.removeEventListener('scroll', this._sc); this._io && this._io.disconnect(); this._mo && this._mo.disconnect(); }
+  componentDidUpdate(){ const lock = this.state.menu && this.state.w < 1000; if (lock !== this._locked) { this._locked = lock; const de = document.documentElement, b = document.body;
+      if (lock) { this._sy = window.scrollY; de.style.overflow = 'hidden'; b.style.overflow = 'hidden'; b.style.position = 'fixed'; b.style.top = -this._sy + 'px'; b.style.left = '0'; b.style.right = '0'; }
+      else { de.style.overflow = ''; b.style.overflow = ''; b.style.position = ''; b.style.top = ''; b.style.left = ''; b.style.right = ''; if (this._skipRestore) this._skipRestore = false; else window.scrollTo(0, this._sy || 0); } } }
+  componentWillUnmount(){ document.documentElement.style.overflow = ''; document.body.style.cssText = ''; window.removeEventListener('resize', this._r); window.removeEventListener('scroll', this._sc); this._io && this._io.disconnect(); this._mo && this._mo.disconnect(); }
   renderVals(){
     const { lang, w, menu, m, sent, areas } = this.state;
-    const t = T[lang], mobile = w < 834, ko = lang === 'ko';
+    const t = T[lang], mobile = w < 1000, ko = lang === 'ko';
     const cm = MEDIA[lang][m];
     const page = this.state.page, megaKey = mobile ? null : this.state.mega, mega = !!megaKey;
     const P = PAGES[page] || PAGES.cmo, pd = P[lang];
@@ -1432,7 +1563,20 @@ class Component extends DCLogic {
       features: pd.features.map(([id,tag,title,desc,points,img],i) => ({id,tag,title,desc,points,img,order: i%2 ? 2 : 0})),
       steps: pd.steps.map((label,i) => ({label, no: String(i+1).padStart(2,'0')}))};
     return {
-      isSvcGen: !!PAGES[page] && page!=='cmo', isCmo: page==='cmo', isHome: !page, pg,
+      isSvcGen: !!PAGES[page] && page!=='cmo', isCmo: page==='cmo', isHome: !page, isPress: page==='press', prO: page==='press' ? 1 : 0.85, navPress: ko ? '뉴스룸' : 'Newsroom',
+      pr: (() => { const s = this.state, ad = !!s.admin;
+        return {isAdmin: ad, notAdmin: !ad, showLogin: s.showLogin, loginErr: s.loginErr, empty: !s.press.length, status: s.pStatus || (ko ? '변경 후 [사이트에 게시]를 눌러주세요.' : 'Press Publish after changes.'), stC: s.pStC, token: s.ghToken, imgName: s.pImgName || (ko ? '선택된 이미지 없음' : 'No image selected'),
+          items: s.press.map(p => ({...p, img: p.img || null, url: p.url || null, onDel: () => this.setState({press: s.press.filter(x => x.id !== p.id), pStatus: ko ? '게시 전 변경사항이 있습니다.' : 'Unpublished changes.', pStC:'#B3165E'})})),
+          title: ko ? '뉴스룸' : 'Newsroom', sub: ko ? '아미코젠 바이오프로세스의 새로운 소식을 전합니다.' : 'The latest from Amicogen Bioprocess.',
+          lEmpty: ko ? '등록된 기사가 없습니다.' : 'No articles yet.', lRead: ko ? '기사 보기' : 'Read article', lDel: ko ? '삭제' : 'Delete', lAdminLogin: ko ? '관리자 로그인' : 'Admin login', lLogout: ko ? '로그아웃' : 'Log out',
+          lNew: ko ? '새 기사 등록' : 'New article', fTitle: ko ? '기사 제목' : 'Headline', fOutlet: ko ? '언론사' : 'Outlet', fUrl: ko ? '기사 링크 (https://…)' : 'Article URL (https://…)', fSummary: ko ? '요약 (선택)' : 'Summary (optional)', fImg: ko ? '대표 이미지 선택' : 'Choose image', lAdd: ko ? '목록에 추가' : 'Add to list',
+          lPublish: ko ? '사이트에 게시' : 'Publish to site', lPub: ko ? '사이트에 게시' : 'Publish', lDownload: ko ? 'press.json 다운로드' : 'Download press.json', fToken: ko ? 'GitHub 토큰 (최초 1회 입력, 이 브라우저에 저장)' : 'GitHub token (saved in this browser)',
+          tokenHelp: ko ? 'GitHub → Settings → Developer settings → Fine-grained tokens에서 agbioprocess-homepage 저장소의 Contents: Read and write 권한으로 발급하세요.' : 'Create a fine-grained token with Contents: Read and write on the agbioprocess-homepage repository.',
+          lLoginTitle: ko ? '관리자 로그인' : 'Admin login', fId: ko ? '아이디' : 'ID', fPw: ko ? '비밀번호' : 'Password', lLogin: ko ? '로그인' : 'Log in', lLoginErr: ko ? '아이디 또는 비밀번호가 올바르지 않습니다.' : 'Incorrect ID or password.',
+          add: (e) => this._pressAdd(e), onImg: (e) => this._pressImg(e), publish: () => this._pressPublish(), download: () => this._pressDownload(),
+          onToken: (e) => { const v = e.target.value; localStorage.setItem('ag_gh_token', v); this.setState({ghToken: v}); },
+          openLogin: () => this.setState({showLogin:true, loginErr:false}), closeLogin: () => this.setState({showLogin:false}), stop: (e) => e.stopPropagation(), login: (e) => this._login(e),
+          logout: () => { sessionStorage.removeItem('ag_admin'); this.setState({admin:false}); }}; })(), pg,
       cm: (() => { const c = CMOC[lang]; return {...c, caps: c.caps.map(([v,k]) => ({v,k})), impStats: c.impStats.map(([v,k]) => ({v,k})), mr: c.mr.map(([tag,t2,d]) => ({tag,t:t2,d})), loc: c.loc.map(([tag,v,t2,d]) => ({tag,v,t:t2,d})),
         proc: c.proc.map(([en,k2],i) => ({en, ko:k2, no:String(i+1).padStart(2,'0')})), feats: c.feats.map(([t2,d]) => ({t:t2,d})), imp: c.imp.map(([t2,d]) => ({t:t2,d})),
         path: c.path.map(([id,tag,gate,t2,scale,items]) => ({id,tag,gate,t:t2,items, scale: scale.map(([v,k]) => ({v,k})), tc: tag==='GMP' ? '#fff' : '#1428E6', tb: tag==='GMP' ? '#1428E6' : '#E6E9FD'}))}; })(),
@@ -1468,7 +1612,7 @@ class Component extends DCLogic {
       chJump: [...CHOS[lang].map(p2 => ({label: p2.name, onClick: (e) => { e.preventDefault(); this._top(p2.id); }})), {label: ko ? 'KBIOHealth 평가' : 'KBIOHealth results', onClick: (e) => { e.preventDefault(); this._top('kbio'); }}],
       pageTabs: PAGE_ORDER.map(k => ({label: PAGES[k][lang].name, c: k===page ? '#1d1d1f' : '#1428E6', onClick: this.openPage(k)})),
       open: {cmo: this.openPage('cmo'), custom: this.openPage('custom'), analysis: this.openPage('analysis')},
-      go: {proa: this.openPage('proa'), hipure: this.openPage('hipure'), denarase: this.openPage('denarase'), buffer: this.openPage('buffer'), cellc: this.openPage('cellcipient'), contactCellc: this.goContact(6), home: (e) => { e.preventDefault(); this.setState({page:null, mega:null, menu:false}, () => window.scrollTo({top:0})); }, contactCmo: this.goContact(0), cmo: this.openPage('cmo'), media: this.goHome('media'), downstream: this.goHome('downstream'), facility: this.goHome('facility'), contact: this.goHome('contact')},
+      go: {press: this.openPage('press'), proa: this.openPage('proa'), hipure: this.openPage('hipure'), denarase: this.openPage('denarase'), buffer: this.openPage('buffer'), cellc: this.openPage('cellcipient'), contactCellc: this.goContact(6), home: (e) => { e.preventDefault(); this.setState({page:null, mega:null, menu:false}, () => window.scrollTo({top:0})); }, contactCmo: this.goContact(0), cmo: this.openPage('cmo'), media: this.goHome('media'), downstream: this.goHome('downstream'), facility: this.goHome('facility'), contact: this.goHome('contact')},
       openMegaSvc: () => { if (this.state.mega!=='svc') this.setState({mega:'svc'}); }, openMegaDsp: () => { if (this.state.mega!=='dsp') this.setState({mega:'dsp'}); }, openMegaCat: () => { if (this.state.mega!=='cat') this.setState({mega:'cat'}); }, closeMega: () => { if (this.state.mega) this.setState({mega:null}); },
       megaO: mega ? 1 : 0, megaPE: mega ? 'auto' : 'none', megaH: mega ? '420px' : '0px', megaY: mega ? '0px' : '-8px', upO: megaKey==='svc' || PAGES[page] ? 1 : 0.85, catO: megaKey==='cat' || CATK.includes(page) ? 1 : 0.85,
       megaMain: PAGE_ORDER.map(k => ({label: PAGES[k][lang].name, onClick: this.openPage(k)})),
@@ -1486,6 +1630,9 @@ class Component extends DCLogic {
       ]) : PAGE_ORDER.map(k => ({label: PAGES[k][lang].name, onClick: this.openPage(k), items: PAGES[k][lang].features.map(f => ({label: f[2], onClick: this.openPage(k, f[0])}))})),
       mailList: [['order','order@amicogen.com', ko ? '문의 접수' : 'Inquiries'], ['sales','ecko@amicogen.com', ko ? '글로벌 / 국내 영업 담당자' : 'Global / Domestic Sales']].map(([k2,addr,label]) => { const c = this.state.copied===k2; return {label, addr, btn: c ? (ko ? '복사됨 ✓' : 'Copied ✓') : (ko ? '주소 복사' : 'Copy'), bg: c ? '#1428E6' : '#fff', fg: c ? '#fff' : '#1428E6', onCopy: () => this._copy(k2, addr)}; }),
       t, isDesktop: !mobile, isMobile: mobile, showMenu: mobile && menu,
+      mb: (() => { const o = mobile && menu; const g = {}; for (let i = 0; i < 8; i++) g['d'+i] = o ? (0.12 + i*0.04).toFixed(2)+'s' : '0s';
+        return {...g, clip: o ? 'inset(0 0 0 0)' : 'inset(0 0 100% 0)', pe: o ? 'auto' : 'none', vis: o ? 'visible' : 'hidden', visD: o ? '0s' : '0.5s', o: o ? 1 : 0, y: o ? '0px' : '-12px',
+          l1: o ? 'translateY(3.6px) rotate(45deg)' : 'none', l2: o ? 'translateY(-3.6px) rotate(-45deg)' : 'none'}; })(),
       toggleMenu: () => this.setState({menu: !menu}), closeMenu: () => this.setState({menu:false}),
       toggleLang: () => this.setState({lang: ko ? 'en' : 'ko'}),
       koW: ko ? 600 : 400, koO: ko ? 1 : 0.45, enW: ko ? 400 : 600, enO: ko ? 0.45 : 1,
