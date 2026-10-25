@@ -320,8 +320,11 @@ button,input,textarea{font-family:inherit}
     <div style="font-size:clamp(17px,1.8vw,21px);font-weight:600;color:#1428E6">{{ pg.kicker }}</div>
     <h1 style="margin:10px auto 0;max-width:900px;font-size:clamp(38px,6vw,72px);line-height:1.06;letter-spacing:-0.03em;font-weight:700;white-space:pre-line">{{ pg.title }}</h1>
     <p style="margin:18px auto 0;max-width:640px;font-size:clamp(18px,2vw,23px);line-height:1.4;color:#424245;text-wrap:balance">{{ pg.sub }}</p>
-    <div data-scrub="hero" style="max-width:1100px;margin:clamp(40px,6vw,64px) auto 0;aspect-ratio:16/8;border-radius:28px;overflow:hidden;transform-origin:50% 0">
-      <div style="width:100%;height:100%;background-image:url({{ pg.img }});background-size:cover;background-position:center"></div>
+    <div data-scrub="hero" onMouseEnter="{{ heroIn }}" onMouseLeave="{{ heroOut }}" style="max-width:1100px;margin:clamp(40px,6vw,64px) auto 0;aspect-ratio:16/8;border-radius:28px;overflow:hidden;transform-origin:50% 0;position:relative;background:#f5f5f7">
+      <div style="position:absolute;inset:0;background-image:url({{ pg.img }});background-size:cover;background-position:center;opacity:{{ heroA }};transition:opacity 0.6s ease"></div>
+      <sc-if value="{{ pg.img2 }}" hint-placeholder-val="{{ false }}">
+        <div style="position:absolute;inset:0;background-image:url({{ pg.img2 }});background-size:cover;background-position:center;opacity:{{ heroB }};transform:scale({{ heroS }});transition:opacity 0.6s ease,transform 1.2s cubic-bezier(0.25,0.1,0.25,1)"></div>
+      </sc-if>
     </div>
   </section>
   <section style="background:#fff;padding:clamp(72px,10vw,130px) 22px 0">
@@ -829,7 +832,7 @@ button,input,textarea{font-family:inherit}
       <sc-if value="{{ dp.link }}" hint-placeholder-val="{{ false }}"><a href="{{ dp.link.url }}" target="_blank" rel="noopener" style="font-size:17px;white-space:nowrap;color:#424245">{{ dp.link.label }} ›</a></sc-if>
     </div>
     <sc-if value="{{ dp.img }}" hint-placeholder-val="{{ false }}">
-      <div data-scrub="hero" style="max-width:1100px;margin:clamp(40px,6vw,64px) auto 0;aspect-ratio:16/8;border-radius:28px;overflow:hidden;transform-origin:50% 0;background:#F2F4FB"><div style="width:100%;height:100%;background-image:url({{ dp.img }});background-size:cover;background-position:center"></div></div>
+      <div data-scrub="hero" style="max-width:{{ dp.imgW }};margin:clamp(40px,6vw,64px) auto 0;aspect-ratio:{{ dp.imgAR }};border-radius:28px;overflow:hidden;transform-origin:50% 0;background:{{ dp.imgBg }}"><div style="width:100%;height:100%;background-image:url({{ dp.img }});background-size:cover;background-position:center"></div></div>
     </sc-if>
   </section>
   <section style="background:#fff;padding:clamp(72px,9vw,120px) 22px 0">
@@ -848,7 +851,7 @@ button,input,textarea{font-family:inherit}
     <div style="max-width:1024px;margin:0 auto">
       <h2 style="margin:0;font-size:clamp(30px,4.2vw,52px);line-height:1.1;letter-spacing:-0.03em;font-weight:700;text-wrap:balance">{{ dp.featTitle }}</h2>
       <sc-if value="{{ dp.featSub }}" hint-placeholder-val="{{ false }}"><p style="margin:14px 0 0;max-width:680px;font-size:clamp(17px,1.7vw,20px);line-height:1.6;color:#6e6e73;text-wrap:pretty">{{ dp.featSub }}</p></sc-if>
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,290px),1fr));gap:12px;margin-top:clamp(32px,5vw,52px)">
+      <div style="display:grid;grid-template-columns:{{ dp.featCols }};gap:12px;margin-top:clamp(32px,5vw,52px)">
         <sc-for list="{{ dp.feats }}" as="ft" hint-placeholder-count="6">
           <div data-reveal="1" style="background:rgba(255,255,255,0.72);backdrop-filter:blur(24px) saturate(160%);-webkit-backdrop-filter:blur(24px) saturate(160%);border:1px solid rgba(20,40,230,0.09);box-shadow:inset 0 1px 0 rgba(255,255,255,1),0 1px 2px rgba(15,30,120,0.05),0 18px 48px -22px rgba(15,30,120,0.22);border-radius:22px;padding:28px 26px;display:flex;flex-direction:column;gap:10px">
             <span style="font-size:19px;font-weight:700;letter-spacing:-0.02em">{{ ft.t }}</span>
@@ -1263,7 +1266,7 @@ const PAGES = {
    en:{name:'Media CMO Service', kicker:'Media CMO Service', title:'Your formulation.\nGMP quality.', sub:'From commercial GMP production to Pre-GMP small batches — manufacturing matched to your stage.',
     features:[['gmp','GMP SCALE','Commercial-scale Manufacturing (GMP Scale)','Contract manufacturing of powder and liquid media from your formulation at commercial scale in our Songdo GMP facility.',['Formulation-based GMP production','Powder · liquid media','Scale-up · tech transfer','Quality documentation'],'assets/blender-teal.png'],['pregmp','PRE-GMP SCALE','Small-scale Manufacturing Support (Pre-GMP Scale)','Fast small batches for process development and pre-clinical stages, keeping your timeline moving.',['Small-batch production','Multi-formulation screening','Seamless path to GMP','Fast turnaround'],'assets/ultimax.jpg']],
     steps:['Inquiry · Review','Tech transfer','Pilot batch','GMP production','QC · Release']}},
-  custom:{img:'assets/lab-woman.png', ko:{name:'맞춤형 서비스', kicker:'Custom Services', title:'세포에 맞춘 배지.\n데이터로 설계합니다.', sub:'세포주와 공정 조건에 꼭 맞는 배지 조성을 개발합니다.',
+  custom:{img:'assets/lab-woman.png', img2:'assets/media-lineup.jpg', ko:{name:'맞춤형 서비스', kicker:'Custom Services', title:'세포에 맞춘 배지.\n데이터로 설계합니다.', sub:'세포주와 공정 조건에 꼭 맞는 배지 조성을 개발합니다.',
     features:[['formulation','FORMULATION DEVELOPMENT','조성 개발','세포주의 성장과 생산성 데이터를 바탕으로 기초배지와 피드 조성을 설계하고 최적화합니다.',['세포주 맞춤 조성 설계','피드 · 첨가제 최적화','성능 평가 데이터 제공'],'assets/lab-man.png']],
     steps:['요구사항 협의','조성 설계','시제품 제조','성능 평가','최종 조성 확정']},
    en:{name:'Custom Services', kicker:'Custom Services', title:'Media fit for your cells.\nDesigned with data.', sub:'Formulation development tailored to your cell line and process.',
@@ -1450,7 +1453,7 @@ const DSP = {
    tables:[{id:'hipure-data', title:'Protein A 레진 HCP 비교', sub:'용출 pH별 HCP, 용출 부피, 수율', head:['Resin','Elution pH','HCP (ppm)','Volume (CV)','Yield (%)'], cols:'minmax(0,1.6fr) repeat(4,minmax(0,1fr))', minW:'560px', rows:[['Global market leader 1','3.5','3,625.4','2.3','100'],['Global market leader 1','4.0','741.7','13.9','100'],['Global market leader 2','3.5','3,219.9','2.3','100'],['Global market leader 2','4.0','1,290.6','19.2','34.4'],['HipureA™ Cycloid','3.5','715.2','1.8','100','*'],['HipureA™ Cycloid','4.0','348.6','1.9','100','*'],['HipureA™ Cycloid','4.5','343.3','2.4','100','*']]},
     {id:'hipure-sum', title:'HCP 제거 요약', head:['Case','HCP (ppm)'], cols:'minmax(0,2fr) minmax(0,1fr)', minW:'0', rows:[['1. 기존 Protein A + 폴리싱','약 3,000 – 700'],['2. 자체 버퍼 + HipureA™','< 90','*'],['3. 자체 버퍼 + HipureA™ + 이온교환','≤ 11','*']], note:'사내 검증: mAb 공정(자체 버퍼 세척 → 캡처 → IEX)에서 수율을 유지하며 HCP ≤ 12 ppm 달성.'}],
    bottom:'폴리싱은 줄이고, 순도는 높이고.', disc:'데이터는 아미코젠 사내 검증 결과이며 항체 및 공정 조건에 따라 달라질 수 있습니다.'},
-  denarase:{name:'Denarase®', badge:'아미코젠 · Denarase® 국내 공식 유통사', kicker:'c-LEcta Denarase® · Impurity Engineering Enzyme', title:'DNA · RNA 불순물,\n효소 하나로.', sub:'Denarase®는 c-LEcta가 개발한 광범위 nuclease로, 바이오의약품 · 바이러스 벡터 · 백신 공정에서 숙주세포 핵산을 분해해 점도를 낮추고 정제를 단순화합니다.', cta:'Denarase® 구매 · 견적 문의', link:{label:'c-LEcta Denarase® 공식 사이트', url:'https://denarase.c-lecta.com/denarase'}, img:null,
+  denarase:{name:'Denarase®', badge:'아미코젠 · Denarase® 국내 공식 유통사', kicker:'c-LEcta Denarase® · Impurity Engineering Enzyme', title:'DNA · RNA 불순물,\n효소 하나로.', sub:'Denarase®는 c-LEcta가 개발한 광범위 nuclease로, 바이오의약품 · 바이러스 벡터 · 백신 공정에서 숙주세포 핵산을 분해해 점도를 낮추고 정제를 단순화합니다.', cta:'Denarase® 구매 · 견적 문의', link:{label:'c-LEcta Denarase® 공식 사이트', url:'https://denarase.c-lecta.com/denarase'}, img:'assets/denarase.webp', imgFit:'contain',
    stats:[['DNA · RNA','단일 · 이중가닥 핵산 분해'],['Linear · Circular','선형 · 원형 · 초나선 형태 모두 분해'],['국내 공식 유통','아미코젠 직접 공급 · 기술 지원']],
    featTitle:'핵산 불순물 제거를 더 간단하게.',
    feats:[['점도 감소','세포 용해물의 핵산을 분해해 점도를 낮추고 여과 · 크로마토그래피 효율을 높입니다.'],['숙주세포 DNA 저감','최종 제품의 잔류 DNA 기준 대응을 돕습니다.'],['다양한 공정 적용','재조합 단백질, 바이러스 벡터, 백신 등 다양한 바이오 공정에 사용합니다.'],['국내 공급 · 기술 지원','아미코젠이 국내 공식 유통사로서 구매, 견적, 적용 상담을 지원합니다.']],
@@ -1475,7 +1478,7 @@ const DSP = {
    tables:[{id:'hipure-data', title:'Protein A resin HCP comparison', sub:'HCP, elution volume and yield by elution pH', head:['Resin','Elution pH','HCP (ppm)','Volume (CV)','Yield (%)'], cols:'minmax(0,1.6fr) repeat(4,minmax(0,1fr))', minW:'560px', rows:[['Global market leader 1','3.5','3,625.4','2.3','100'],['Global market leader 1','4.0','741.7','13.9','100'],['Global market leader 2','3.5','3,219.9','2.3','100'],['Global market leader 2','4.0','1,290.6','19.2','34.4'],['HipureA™ Cycloid','3.5','715.2','1.8','100','*'],['HipureA™ Cycloid','4.0','348.6','1.9','100','*'],['HipureA™ Cycloid','4.5','343.3','2.4','100','*']]},
     {id:'hipure-sum', title:'HCP removal summary', head:['Case','HCP (ppm)'], cols:'minmax(0,2fr) minmax(0,1fr)', minW:'0', rows:[['1. Conventional Protein A + polishing','~3,000 – 700'],['2. In-house buffer + HipureA™','< 90','*'],['3. In-house buffer + HipureA™ + ion exchange','≤ 11','*']], note:'In-house validation: mAb process (in-house buffer wash → capture → IEX) achieved HCP ≤ 12 ppm while maintaining yield.'}],
    bottom:'Less polishing. Higher purity.', disc:'Data from Amicogen in-house validation; results vary by antibody and process conditions.'},
-  denarase:{name:'Denarase®', badge:'Amicogen · Official Denarase® distributor in Korea', kicker:'c-LEcta Denarase® · Impurity Engineering Enzyme', title:'DNA and RNA impurities,\none enzyme.', sub:'Denarase® is a broad-spectrum nuclease from c-LEcta that degrades host-cell nucleic acids in biologics, viral vector and vaccine processes — lowering viscosity and simplifying purification.', cta:'Buy or request a quote', link:{label:'c-LEcta Denarase® website', url:'https://denarase.c-lecta.com/denarase'}, img:null,
+  denarase:{name:'Denarase®', badge:'Amicogen · Official Denarase® distributor in Korea', kicker:'c-LEcta Denarase® · Impurity Engineering Enzyme', title:'DNA and RNA impurities,\none enzyme.', sub:'Denarase® is a broad-spectrum nuclease from c-LEcta that degrades host-cell nucleic acids in biologics, viral vector and vaccine processes — lowering viscosity and simplifying purification.', cta:'Buy or request a quote', link:{label:'c-LEcta Denarase® website', url:'https://denarase.c-lecta.com/denarase'}, img:'assets/denarase.webp', imgFit:'contain',
    stats:[['DNA · RNA','Single- and double-stranded'],['Linear · Circular','Linear, circular and supercoiled forms'],['Official in Korea','Supplied and supported by Amicogen']],
    featTitle:'Nucleic acid clearance, simplified.',
    feats:[['Lower viscosity','Degrades nucleic acids in lysates to improve filtration and chromatography.'],['Less host-cell DNA','Helps meet residual DNA specifications in final product.'],['Broad applicability','Used across recombinant proteins, viral vectors and vaccines.'],['Local supply & support','As official distributor in Korea, Amicogen supports purchasing, quotes and application.']],
@@ -1614,11 +1617,12 @@ class Component extends DCLogic {
     const cm = MEDIA[lang][m];
     const page = this.state.page, megaKey = mobile ? null : this.state.mega, mega = !!megaKey;
     const P = PAGES[page] || PAGES.cmo, pd = P[lang];
-    const pg = {name: pd.name, kicker: pd.kicker, title: pd.title, sub: pd.sub, img: P.img,
+    const pg = {name: pd.name, kicker: pd.kicker, title: pd.title, sub: pd.sub, img: P.img, img2: P.img2 || null,
       features: pd.features.map(([id,tag,title,desc,points,img],i) => ({id,tag,title,desc,points,img,order: i%2 ? 2 : 0})),
       steps: pd.steps.map((label,i) => ({label, no: String(i+1).padStart(2,'0')}))};
     return {
-      isSvcGen: !!PAGES[page] && page!=='cmo', isCmo: page==='cmo', isHome: !page, isPress: page==='press', prO: page==='press' ? 1 : 0.85, navPress: ko ? '뉴스룸' : 'Newsroom',
+      isSvcGen: !!PAGES[page] && page!=='cmo', isCmo: page==='cmo', isHome: !page, heroIn: () => this.setState({heroHover:true}), heroOut: () => this.setState({heroHover:false}),
+      heroA: (this.state.heroHover && page==='custom') ? 0 : 1, heroB: (this.state.heroHover && page==='custom') ? 1 : 0, heroS: (this.state.heroHover && page==='custom') ? 1 : 1.04, isPress: page==='press', prO: page==='press' ? 1 : 0.85, navPress: ko ? '뉴스룸' : 'Newsroom',
       pr: (() => { const s = this.state, ad = !!s.admin;
         return {isAdmin: ad, notAdmin: !ad, showLogin: s.showLogin, loginErr: s.loginErr, empty: !s.press.length, status: s.pStatus || (ko ? '변경 후 [사이트에 게시]를 눌러주세요.' : 'Press Publish after changes.'), stC: s.pStC, token: s.ghToken, imgName: s.pImgName || (ko ? '선택된 이미지 없음' : 'No image selected'),
           items: s.press.map(p => ({...p, img: p.img || null, url: p.url || null, editing: ad && s.editId === p.id, notEditing: !(ad && s.editId === p.id), onEdit: () => this.setState({editId: p.id}), onCancel: () => this.setState({editId: null}), onSave: (e) => this._pressSave(e, p.id), onDel: () => this.setState({press: s.press.filter(x => x.id !== p.id), pStatus: ko ? '게시 전 변경사항이 있습니다.' : 'Unpublished changes.', pStC:'#B3165E'})})),
@@ -1639,7 +1643,7 @@ class Component extends DCLogic {
       isCatalog: CATK.includes(page), isClassical: page==='classical', isCustomC: page==='customc', isCho: page==='cho', isVero: page==='vero', isDsp: DSPK.includes(page), acc: page==='denarase' ? '#B3165E' : '#1428E6', dspO: megaKey==='dsp' || DSPK.includes(page) ? 1 : 0.85,
       dspTabs: DSPK.map(k => ({label: DSP[lang][k].name, c: k===page ? '#1d1d1f' : '#1428E6', onClick: this.openPage(k)})),
       dspMain: DSPK.map(k => ({label: DSP[lang][k].name, onClick: this.openPage(k)})),
-      dp: (() => { const c = DSP[lang][DSPK.includes(page) ? page : 'proa']; return {...c, badge: c.badge || null, link: c.link || null, featSub: c.featSub || null, disc: c.disc || null, contact: this.goContact(DSPA[DSPK.includes(page) ? page : 'proa']),
+      dp: (() => { const c = DSP[lang][DSPK.includes(page) ? page : 'proa']; return {...c, featCols: c.feats.length === 4 ? 'repeat(auto-fit,minmax(min(100%,380px),1fr))' : 'repeat(auto-fit,minmax(min(100%,290px),1fr))', imgW: c.imgFit ? '760px' : '1100px', imgAR: c.imgFit ? '10/9' : '16/8', imgBg: c.imgFit ? 'transparent' : '#F2F4FB', badge: c.badge || null, link: c.link || null, featSub: c.featSub || null, disc: c.disc || null, contact: this.goContact(DSPA[DSPK.includes(page) ? page : 'proa']),
         stats: c.stats.map(([v,k]) => ({v,k})), feats: c.feats.map(([t2,d]) => ({t:t2,d})),
         tables: c.tables.map(tb => ({...tb, sub: tb.sub || null, note: tb.note || null, rows: tb.rows.map(r => { const hl = r[r.length-1]==='*'; return {cells: hl ? r.slice(0,-1) : r, bg: hl ? 'rgba(20,40,230,0.05)' : 'transparent', fw: hl ? 600 : 400, c: hl ? '#1428E6' : '#1d1d1f'}; })}))}; })(), isCellc: page==='cellcipient', ccO: page==='cellcipient' ? 1 : 0.85,
       cc2: (() => { const c = CELLC[lang]; return {...c, q: c.q.map(([k,v,d]) => ({k,v,d})), path: c.path.map(([t2,d],i) => ({t:t2,d,no:String(i+1).padStart(2,'0')})), ev: c.ev.map(([tag,d,c3]) => ({tag,d,c:c3})), props: c.props.map(([k,v]) => ({k,v})), desc: c.desc.map(([t2,d]) => ({t:t2,d}))}; })(),
