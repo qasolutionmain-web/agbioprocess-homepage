@@ -936,15 +936,31 @@ button,input,textarea{font-family:inherit}
         <sc-for list="{{ pr.items }}" as="it" hint-placeholder-count="0">
           <div data-reveal="1" style="background:rgba(255,255,255,0.72);backdrop-filter:blur(24px) saturate(160%);-webkit-backdrop-filter:blur(24px) saturate(160%);border:1px solid rgba(20,40,230,0.09);box-shadow:inset 0 1px 0 rgba(255,255,255,1),0 1px 2px rgba(15,30,120,0.05),0 18px 48px -22px rgba(15,30,120,0.22);border-radius:22px;overflow:hidden;display:flex;flex-direction:column">
             <sc-if value="{{ it.img }}" hint-placeholder-val="{{ false }}"><div style="aspect-ratio:16/9;background:#F2F4FB center/cover no-repeat;background-image:url({{ it.img }})"></div></sc-if>
+            <sc-if value="{{ it.editing }}" hint-placeholder-val="{{ false }}">
+              <form onSubmit="{{ it.onSave }}" style="padding:20px;display:flex;flex-direction:column;gap:8px;flex:1">
+                <div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px">
+                  <input name="outlet" defaultValue="{{ it.outlet }}" placeholder="{{ pr.fOutlet }}" style="width:100%;box-sizing:border-box;height:44px;border:1px solid #d2d2d7;border-radius:12px;padding:0 12px;font-size:15px;font-family:inherit;background:#fff">
+                  <input name="date" type="date" defaultValue="{{ it.date }}" style="width:100%;box-sizing:border-box;height:44px;border:1px solid #d2d2d7;border-radius:12px;padding:0 12px;font-size:15px;font-family:inherit;background:#fff">
+                </div>
+                <textarea name="title" defaultValue="{{ it.title }}" placeholder="{{ pr.fTitle }}" rows="2" style="width:100%;box-sizing:border-box;border:1px solid #d2d2d7;border-radius:12px;padding:10px 12px;font-size:15px;font-weight:600;font-family:inherit;line-height:1.4;resize:vertical"></textarea>
+                <input name="url" defaultValue="{{ it.url }}" placeholder="{{ pr.fUrl }}" style="width:100%;box-sizing:border-box;height:44px;border:1px solid #d2d2d7;border-radius:12px;padding:0 12px;font-size:15px;font-family:inherit;background:#fff">
+                <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:auto;padding-top:6px">
+                  <button type="button" onClick="{{ it.onCancel }}" style="background:#fff;color:#1d1d1f;border:1px solid #d2d2d7;padding:9px 16px;border-radius:980px;font-size:14px;cursor:pointer">{{ pr.lCancel }}</button>
+                  <button type="submit" style="background:#1428E6;color:#fff;border:0;padding:9px 18px;border-radius:980px;font-size:14px;font-weight:600;cursor:pointer">{{ pr.lSave }}</button>
+                </div>
+              </form>
+            </sc-if>
+            <sc-if value="{{ it.notEditing }}" hint-placeholder-val="{{ true }}">
             <div style="padding:22px 22px 24px;display:flex;flex-direction:column;gap:8px;flex:1">
               <span style="font-size:12px;color:#6e6e73">{{ it.outlet }} · {{ it.date }}</span>
               <span style="font-size:18px;font-weight:700;letter-spacing:-0.02em;line-height:1.35">{{ it.title }}</span>
               <span style="font-size:14px;line-height:1.6;color:#424245">{{ it.summary }}</span>
               <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:auto;padding-top:10px">
                 <sc-if value="{{ it.url }}" hint-placeholder-val="{{ false }}"><a href="{{ it.url }}" target="_blank" rel="noopener" style="font-size:14px">{{ pr.lRead }} ›</a></sc-if>
-                <sc-if value="{{ pr.isAdmin }}" hint-placeholder-val="{{ false }}"><button type="button" onClick="{{ it.onDel }}" style="border:0;background:transparent;color:#B3165E;font-size:13px;cursor:pointer;padding:6px 0;margin-left:auto">{{ pr.lDel }}</button></sc-if>
+                <sc-if value="{{ pr.isAdmin }}" hint-placeholder-val="{{ false }}"><div style="display:flex;gap:14px;margin-left:auto"><button type="button" onClick="{{ it.onEdit }}" style="border:0;background:transparent;color:#1428E6;font-size:13px;cursor:pointer;padding:6px 0">{{ pr.lEdit }}</button><button type="button" onClick="{{ it.onDel }}" style="border:0;background:transparent;color:#B3165E;font-size:13px;cursor:pointer;padding:6px 0">{{ pr.lDel }}</button></div></sc-if>
               </div>
             </div>
+            </sc-if>
           </div>
         </sc-for>
       </div>
@@ -1113,11 +1129,25 @@ button,input,textarea{font-family:inherit}
             <input required placeholder="{{ t.fName }}" style="height:56px;border:1px solid #d2d2d7;border-radius:12px;padding:0 16px;font-size:17px;outline:none;background:rgba(255,255,255,0.7);color:#1d1d1f">
             <input placeholder="{{ t.fCompany }}" style="height:56px;border:1px solid #d2d2d7;border-radius:12px;padding:0 16px;font-size:17px;outline:none;background:rgba(255,255,255,0.7);color:#1d1d1f">
           </div>
-          <input type="email" required placeholder="{{ t.fEmail }}" style="height:56px;border:1px solid #d2d2d7;border-radius:12px;padding:0 16px;font-size:17px;outline:none;background:rgba(255,255,255,0.7);color:#1d1d1f">
-          <div style="display:flex;flex-wrap:wrap;gap:8px;padding:6px 0">
-            <sc-for list="{{ areas }}" as="ar" hint-placeholder-count="5">
-              <button type="button" onClick="{{ ar.onToggle }}" style="min-height:40px;padding:8px 16px;border-radius:980px;border:1px solid {{ ar.border }};background:{{ ar.bg }};color:{{ ar.fg }};font-size:14px;cursor:pointer">{{ ar.label }}</button>
-            </sc-for>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px">
+            <input type="email" required placeholder="{{ t.fEmail }}" style="height:56px;border:1px solid #d2d2d7;border-radius:12px;padding:0 16px;font-size:17px;outline:none;background:rgba(255,255,255,0.7);color:#1d1d1f">
+            <input type="tel" placeholder="{{ t.fPhone }}" style="height:56px;border:1px solid #d2d2d7;border-radius:12px;padding:0 16px;font-size:17px;outline:none;background:rgba(255,255,255,0.7);color:#1d1d1f">
+          </div>
+          <div style="border:1px solid {{ areaBorder }};border-radius:12px;background:rgba(255,255,255,0.7);overflow:hidden">
+            <button type="button" onClick="{{ areaToggle }}" style="width:100%;min-height:56px;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 16px;border:0;background:transparent;cursor:pointer;font-size:17px;text-align:left;font-family:inherit">
+              <span style="color:{{ areaSumC }};overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0">{{ areaSummary }}</span>
+              <span style="flex:none;font-size:13px;color:#6e6e73;transform:rotate({{ areaRot }});transition:transform .25s">▼</span>
+            </button>
+            <sc-if value="{{ areaOpen }}" hint-placeholder-val="{{ false }}">
+              <div style="border-top:1px solid #e8e8ed;padding:6px 0">
+                <sc-for list="{{ areas }}" as="ar" hint-placeholder-count="5">
+                  <button type="button" onClick="{{ ar.onToggle }}" style="width:100%;display:flex;align-items:center;gap:12px;min-height:48px;padding:0 16px;border:0;background:transparent;cursor:pointer;font-size:16px;color:#1d1d1f;text-align:left;font-family:inherit" style-hover="background:#F2F4FB">
+                    <span style="flex:none;width:20px;height:20px;border-radius:6px;border:1.5px solid {{ ar.border }};background:{{ ar.bg }};color:#fff;font-size:13px;line-height:18px;text-align:center">{{ ar.check }}</span>
+                    <span>{{ ar.label }}</span>
+                  </button>
+                </sc-for>
+              </div>
+            </sc-if>
           </div>
           <textarea rows="4" placeholder="{{ t.fMsg }}" style="border:1px solid #d2d2d7;border-radius:12px;padding:16px;font-size:17px;outline:none;resize:vertical;color:#1d1d1f"></textarea>
           <button type="submit" style="margin-top:6px;height:52px;background:#1428E6;color:#fff;border:0;border-radius:12px;font-size:17px;cursor:pointer" style-hover="background:#0E1DB8">{{ t.fSubmit }}</button>
@@ -1153,6 +1183,17 @@ button,input,textarea{font-family:inherit}
         <a href="#facility" style="color:#424245">{{ t.navFac }}</a><a href="#contact" style="color:#424245">{{ t.navContact }}</a>
       </div>
     </div>
+    <div style="border-top:1px solid #d2d2d7;padding:24px 0;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:18px 32px;line-height:1.7">
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <div style="display:flex;flex-wrap:wrap;gap:0 10px"><span style="color:#1d1d1f;font-weight:600;min-width:64px">{{ t.ftHq }}</span><span style="color:#424245">{{ t.ftHqAddr }}</span></div>
+        <div style="display:flex;flex-wrap:wrap;gap:0 10px"><span style="color:#1d1d1f;font-weight:600;min-width:64px">{{ t.ftSd }}</span><span style="color:#424245">{{ t.ftSdAddr }}</span></div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <span style="color:#1d1d1f;font-weight:600">Contact Us</span>
+        <div style="display:flex;flex-wrap:wrap;gap:0 10px"><a href="mailto:sales@amicogen.com" style="color:#1428E6">sales@amicogen.com</a><span style="color:#6e6e73">{{ t.ftSales }}</span></div>
+        <div style="display:flex;flex-wrap:wrap;gap:0 10px"><a href="mailto:QM@amicogen.com" style="color:#1428E6">QM@amicogen.com</a><span style="color:#6e6e73">{{ t.ftQm }}</span></div>
+      </div>
+    </div>
     <div style="border-top:1px solid #d2d2d7;padding:18px 0 28px;display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;align-items:center">
       <span>Copyright © 2026 Amicogen Inc. {{ t.footDiv }}</span>
       <img src="assets/logo-ppt.png" alt="AMICOGEN" style="height:18px;display:block">
@@ -1175,8 +1216,9 @@ const T = {
     inquire:'문의하기',
     facKicker:'아미코젠 송도 세포배양배지 센터', facTitle:'바이오의약품의 안정적인 생산,\n송도에서 지원합니다.', facSub:'GMP 기준의 청정 환경에서 칭량부터 블렌딩, 충진, 포장까지. 한결같은 품질의 배지를 제때 공급합니다.',
     ctTitle:'공정에 맞는 솔루션을 함께 찾겠습니다.', ctSub:'제품 사양, 샘플, 위탁생산 견적을 문의하세요.',
-    fName:'이름', fCompany:'회사 / 기관', fEmail:'이메일', fMsg:'문의 내용', fSubmit:'보내기',
-    sentTitle:'메일 앱에서 보내기를 눌러주세요.', sentSub:'메일 앱에서 작성된 내용을 확인한 뒤 보내기를 눌러주세요. 메일 앱이 열리지 않으면 아래 주소로 직접 보내주세요.', mailNote:'메일 앱이 열리지 않으면 주소를 복사해 사용하시는 메일에서 직접 보내주세요.',
+    fName:'이름', fCompany:'회사 / 기관', fEmail:'이메일', fPhone:'전화번호', fMsg:'문의 내용', fSubmit:'보내기',
+    sentTitle:'문의가 접수되었습니다.', sentSub:'담당자가 확인 후 영업일 기준 1~2일 내 회신드리겠습니다.', mailNote:'메일 앱이 열리지 않으면 주소를 복사해 사용하시는 메일에서 직접 보내주세요.',
+    ftHq:'본사', ftHqAddr:'경남 진주시 문산읍 월아산로950번길 14-10', ftSd:'송도', ftSdAddr:'인천광역시 연수구 연구단지로55번길 33 (세포배양배지)', ftSales:'Q&A · 기술지원', ftQm:'품질기술지원',
     fl1:'배지 CMO 서비스', fl2:'맞춤형 서비스', fl4:'정밀분석 서비스', megaL1:'세포배양배지 위탁생산 서비스 살펴보기', flowTitle:'진행 절차', pageCta:'공정에 맞는 방법을 함께 찾아보세요.', fl3:'정제 버퍼', footDiv:'바이오프로세스 사업본부'
   },
   en: {
@@ -1192,16 +1234,17 @@ const T = {
     inquire:'Inquire',
     facKicker:'Amicogen Songdo Cell Culture Media Center', facTitle:'Supporting stable biologics production,\nfrom Songdo.', facSub:'From weighing to blending, filling and packaging in GMP clean environments — consistent media, delivered on time.',
     ctTitle:'Let’s find the right fit for your process.', ctSub:'Ask about specifications, samples or CMO quotes.',
-    fName:'Name', fCompany:'Company / Institution', fEmail:'Email', fMsg:'Message', fSubmit:'Send',
-    sentTitle:'Press send in your mail app.', sentSub:'Please review the message in your mail app and press send. If it didn’t open, email us directly at the address below.', mailNote:'If your mail app doesn’t open, copy an address and send from your own email.',
+    fName:'Name', fCompany:'Company / Institution', fEmail:'Email', fPhone:'Phone', fMsg:'Message', fSubmit:'Send',
+    sentTitle:'Thank you. We’ve received your inquiry.', sentSub:'Our team will get back to you within 1–2 business days.', mailNote:'If your mail app doesn’t open, copy an address and send from your own email.',
+    ftHq:'HQ', ftHqAddr:'14-10, Worasan-ro 950beon-gil, Munsan-eup, Jinju-si, Gyeongsangnam-do, Korea', ftSd:'Songdo', ftSdAddr:'33, Yeongudanji-ro 55beon-gil, Yeonsu-gu, Incheon, Korea (Cell Culture Media)', ftSales:'Q&A · Technical support', ftQm:'Quality & technical support',
     fl1:'Media CMO Service', fl2:'Custom Services', fl4:'Analysis Services', megaL1:'Explore Media CMO Services', flowTitle:'How it works', pageCta:'Let’s find the right approach for your process.', fl3:'Purification buffer', footDiv:'Bioprocess Division'
   }
 };
 const SERVICES = [
-  {img:'assets/gmp1.png', en:'CELL CULTURE MEDIA CMO', ko:['세포배양배지 위탁생산','고객 배합 기반 분말·액상 배지를 GMP 환경에서 생산합니다. 스케일업과 기술이전까지 지원합니다.'], e:['Cell Culture Media CMO','GMP production of powder and liquid media from your formulation, with scale-up and tech-transfer support.']},
-  {img:'assets/lab-woman.png', en:'CUSTOM DEVELOPMENT', ko:['세포배양배지\n맞춤형 개발','세포주의 성장·생산성 데이터를 바탕으로 기초배지와 피드 배합을 최적화합니다.'], e:['Custom Media Development','Basal and feed formulations optimized on growth and productivity data from your cell line.']},
+  {img:'assets/gmp1.png', en:'CELL CULTURE MEDIA CMO', ko:['위탁생산','고객 배합 기반 분말·액상 배지를 GMP 환경에서 생산합니다. 스케일업과 기술이전까지 지원합니다.'], e:['Cell Culture Media CMO','GMP production of powder and liquid media from your formulation, with scale-up and tech-transfer support.']},
+  {img:'assets/lab-woman.png', en:'CUSTOM DEVELOPMENT', ko:['맞춤형 개발','세포주의 성장·생산성 데이터를 바탕으로 기초배지와 피드 배합을 최적화합니다.'], e:['Custom Media Development','Basal and feed formulations optimized on growth and productivity data from your cell line.']},
   {img:'assets/gmp2.png', en:'SMALL-SCALE MANUFACTURING', ko:['소규모 제조 지원','공정 개발·스크리닝 단계의 소량 배치를 신속하게 제조합니다.'], e:['Small-scale Manufacturing','Fast small batches for process development and screening.']},
-  {img:'assets/lab-man.png', en:'MEDIA ANALYSIS', ko:['세포배양배지 정밀분석','배지 성분과 spent media를 분석해 공정 개선의 근거를 제공합니다.'], e:['Media Analysis','Composition and spent-media analysis to ground your process decisions.']}
+  {img:'assets/lab-man.png', en:'MEDIA ANALYSIS', ko:['정밀분석','배지 성분과 spent media를 분석해 공정 개선의 근거를 제공합니다.'], e:['Media Analysis','Composition and spent-media analysis to ground your process decisions.']}
 ];
 const MEDIA = {
   ko:[['CHO','CHO 세포 전용 배지','CHO 세포 기반 항체·재조합 단백질 생산에 최적화된 배지.',['무혈청','화학적 조성 명확','Fed-batch']],['Vero','Vero 세포 전용 배지','백신·바이러스 생산용 Vero 세포 배양을 위한 배지.',['백신 생산','부착 배양','무혈청']],['MSC','MSC 전용 배지','중간엽줄기세포의 증식과 특성 유지를 위한 배지.',['세포치료제','증식 유지','특성 보존']],['기초배지','기초배지','DMEM, RPMI 1640, MEM-α, IMDM, DMEM/F12 등 표준 기초배지.',['분말','액상','표준 규격']],['커스텀','기초배지 커스텀 서비스','성분 가감, 포장 단위 등 고객 사양에 맞춘 기초배지.',['성분 조정','포장 맞춤','소량 가능']]],
@@ -1466,7 +1509,7 @@ const CHOS = {
    groups:[['Dual-basal media',[['CHOSpeed™ Expansion Medium','Ultra-fast growth and recovery; peak viability and consistent doubling'],['CHOSpeed™ Transfection Medium','High-density production; exceptional DNA delivery at >6 × 10⁶ cells/mL']]],['Speed & power',[['Shorter culture','~50% shorter culture duration vs. benchmark'],['Max Titer protocol','Up to 773 mg/L mAb with 32℃ shift + feeding']]],['Key applications',[['AI-driven protein engineering','Validate hundreds of AI-generated variants fast'],['Diagnostic reagents (IgG · IgM)','4-day express protocol; efficient IgM expression'],['Pre-clinical production','Gram-scale samples in weeks, skipping 6–9 month stable line work']]]]}
  ]
 };
-const AREAS = {ko:['배지 CMO','맞춤형 배지','기초배지','기초배지 커스텀','CHO 배지','Vero 배지','Cellcipient®','Protein A 레진','정제 버퍼','Denarase®','HiPure A 레진'], en:['Media CMO','Custom media','Classical media','Classical custom','CHO media','Vero media','Cellcipient®','Protein A resin','Buffer','Denarase®','HiPure A resin']};
+const AREAS = {ko:['배지 CMO','배지 조성개발 / 제형개발','카탈로그 배지 / Cellcipient®','정제공정 제품 / 서비스','기타'], en:['Media CMO','Media formulation / format development','Catalog media / Cellcipient®','Purification products / services','Other']};
 const DSTYLE = [
   {bg:'#fff',fg:'#1d1d1f',kc:'#1428E6',dc:'#424245',lc:'#1428E6'},
   {bg:'#fff',fg:'#1d1d1f',kc:'#5A8A00',dc:'#424245',lc:'#1428E6'},
@@ -1487,15 +1530,25 @@ class Component extends DCLogic {
     const vals = [...f.querySelectorAll('input,textarea')].map(el => ({ph: el.placeholder, v: el.value.trim()})).filter(x => x.v);
     const pick = (obj, list) => list.filter((_, i) => obj[i]);
     const lines = vals.map(x => x.ph + ': ' + x.v);
-    if (type === 'general') { const a = pick(this.state.areas, AREAS[this.state.lang]); if (a.length) lines.splice(Math.min(3, lines.length), 0, (ko ? '관심 분야: ' : 'Area of interest: ') + a.join(', ')); }
+    if (type === 'general') { const a = pick(this.state.areas, AREAS[this.state.lang]); if (a.length) lines.splice(Math.min(4, lines.length), 0, (ko ? '문의 서비스: ' : 'Services: ') + a.join(', ')); }
     else { const c = PTC[this.state.lang]; const tp = pick(this.state.pTypes, c.types), pr = pick(this.state.pProducts, c.products);
       if (tp.length) lines.push(c.fType + ': ' + tp.join(', ')); if (pr.length) lines.push(c.fProducts + ': ' + pr.join(', ')); }
     const company = (vals.find(x => /회사|Company/.test(x.ph)) || {}).v || '';
     const subject = (type === 'partner' ? (ko ? '[유통 파트너 협력 문의] ' : '[Distribution Partnership] ') : (ko ? '[홈페이지 문의] ' : '[Website Inquiry] ')) + company;
     const href = 'mailto:order@amicogen.com?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(lines.join('\n'));
-    this.setState(type === 'partner' ? {pSent:true} : {sent:true});
+    if (type === 'general') {
+      const ins = f.querySelectorAll('input'), ta = f.querySelector('textarea'), g = i => (ins[i] && ins[i].value || '').trim();
+      const fd = new URLSearchParams({'entry.1689112727': g(0), 'entry.1327938820': g(1), 'entry.1034531949': g(2), 'entry.1123802494': g(3), 'entry.1886722596': pick(this.state.areas, AREAS[this.state.lang]).join(', ') + (ko ? '' : ' [EN]'), 'entry.1025138117': (ta && ta.value || '').trim()});
+      this.setState({sent:true, areaOpen:false});
+      fetch('https://docs.google.com/forms/d/e/1FAIpQLSc4ph1bLH-rB8sxs_QvARd1y46EwQhRQcxmprifE8lQ858B_A/formResponse', {method:'POST', mode:'no-cors', body: fd}).catch(() => { window.location.href = href; });
+      return;
+    }
+    this.setState({pSent:true});
     window.location.href = href;
   }
+  _pressSave(e, id){ e.preventDefault(); const f = e.target, v = n => (f.elements[n] && f.elements[n].value || '').trim(), ko = this.state.lang==='ko';
+    const press = this.state.press.map(p => p.id === id ? {...p, title: v('title'), outlet: v('outlet'), date: v('date'), url: v('url')} : p).sort((a,b) => (b.date||'').localeCompare(a.date||''));
+    this.setState({press, editId: null, pStatus: ko ? '수정됨 · [사이트에 게시]를 눌러야 반영됩니다.' : 'Edited · press Publish to go live.', pStC:'#1428E6'}); }
   _pressJson(){ return JSON.stringify(this.state.press, null, 2); }
   _pressAdd(e){ e.preventDefault(); const f = e.target, v = n => (f.elements[n] && f.elements[n].value || '').trim();
     const item = {id: Date.now(), title: v('title'), outlet: v('outlet'), date: v('date'), url: v('url'), summary: v('summary'), img: this.state.pImg || ''};
@@ -1566,9 +1619,9 @@ class Component extends DCLogic {
       isSvcGen: !!PAGES[page] && page!=='cmo', isCmo: page==='cmo', isHome: !page, isPress: page==='press', prO: page==='press' ? 1 : 0.85, navPress: ko ? '뉴스룸' : 'Newsroom',
       pr: (() => { const s = this.state, ad = !!s.admin;
         return {isAdmin: ad, notAdmin: !ad, showLogin: s.showLogin, loginErr: s.loginErr, empty: !s.press.length, status: s.pStatus || (ko ? '변경 후 [사이트에 게시]를 눌러주세요.' : 'Press Publish after changes.'), stC: s.pStC, token: s.ghToken, imgName: s.pImgName || (ko ? '선택된 이미지 없음' : 'No image selected'),
-          items: s.press.map(p => ({...p, img: p.img || null, url: p.url || null, onDel: () => this.setState({press: s.press.filter(x => x.id !== p.id), pStatus: ko ? '게시 전 변경사항이 있습니다.' : 'Unpublished changes.', pStC:'#B3165E'})})),
+          items: s.press.map(p => ({...p, img: p.img || null, url: p.url || null, editing: ad && s.editId === p.id, notEditing: !(ad && s.editId === p.id), onEdit: () => this.setState({editId: p.id}), onCancel: () => this.setState({editId: null}), onSave: (e) => this._pressSave(e, p.id), onDel: () => this.setState({press: s.press.filter(x => x.id !== p.id), pStatus: ko ? '게시 전 변경사항이 있습니다.' : 'Unpublished changes.', pStC:'#B3165E'})})),
           title: ko ? '뉴스룸' : 'Newsroom', sub: ko ? '아미코젠 바이오프로세스의 새로운 소식을 전합니다.' : 'The latest from Amicogen Bioprocess.',
-          lEmpty: ko ? '등록된 기사가 없습니다.' : 'No articles yet.', lRead: ko ? '기사 보기' : 'Read article', lDel: ko ? '삭제' : 'Delete', lAdminLogin: ko ? '관리자 로그인' : 'Admin login', lLogout: ko ? '로그아웃' : 'Log out',
+          lEmpty: ko ? '등록된 기사가 없습니다.' : 'No articles yet.', lRead: ko ? '기사 보기' : 'Read article', lDel: ko ? '삭제' : 'Delete', lEdit: ko ? '수정' : 'Edit', lSave: ko ? '저장' : 'Save', lCancel: ko ? '취소' : 'Cancel', lAdminLogin: ko ? '관리자 로그인' : 'Admin login', lLogout: ko ? '로그아웃' : 'Log out',
           lNew: ko ? '새 기사 등록' : 'New article', fTitle: ko ? '기사 제목' : 'Headline', fOutlet: ko ? '언론사' : 'Outlet', fUrl: ko ? '기사 링크 (https://…)' : 'Article URL (https://…)', fSummary: ko ? '요약 (선택)' : 'Summary (optional)', fImg: ko ? '대표 이미지 선택' : 'Choose image', lAdd: ko ? '목록에 추가' : 'Add to list',
           lPublish: ko ? '사이트에 게시' : 'Publish to site', lPub: ko ? '사이트에 게시' : 'Publish', lDownload: ko ? 'press.json 다운로드' : 'Download press.json', fToken: ko ? 'GitHub 토큰 (최초 1회 입력, 이 브라우저에 저장)' : 'GitHub token (saved in this browser)',
           tokenHelp: ko ? 'GitHub → Settings → Developer settings → Fine-grained tokens에서 agbioprocess-homepage 저장소의 Contents: Read and write 권한으로 발급하세요.' : 'Create a fine-grained token with Contents: Read and write on the agbioprocess-homepage repository.',
@@ -1599,7 +1652,7 @@ class Component extends DCLogic {
       ch: CATC[lang].ch, vr: {...CATC[lang].vr, points: CATC[lang].vr.points.map(([k,t2,d]) => ({k,t:t2,d}))},
       catTabs: ['cho','vero','classical','customc'].map(k => ({label: CATN[lang][k], c: k===page ? '#1d1d1f' : '#1428E6', onClick: this.openPage(k)})),
       catMain: ['cho','vero','classical','customc','partners'].map(k => ({label: CATN[lang][k], onClick: this.openPage(k)})),
-      cat: {cho: this.openPage('cho'), partners: this.openPage('partners'), partnerForm: this.openPage('partners', 'partner-form'), classical: this.openPage('classical', null, {fam:'all'}), custom: this.openPage('customc'), toList: (e) => { e.preventDefault(); this._top('cl-list'); }, contact: this.goContact(null), contactCustom: this.goContact(3), contactCho: this.goContact(4), contactVero: this.goContact(5)},
+      cat: {cho: this.openPage('cho'), partners: this.openPage('partners'), partnerForm: this.openPage('partners', 'partner-form'), classical: this.openPage('classical', null, {fam:'all'}), custom: this.openPage('customc'), toList: (e) => { e.preventDefault(); this._top('cl-list'); }, contact: this.goContact(null), contactCustom: this.goContact(1), contactCho: this.goContact(4), contactVero: this.goContact(5)},
       famChips: FAMS.map(f => { const a = f === this.state.fam; return {label: f==='all' ? (ko ? '전체' : 'All') : f, bg: a ? '#1428E6' : '#F2F4FB', fg: a ? '#fff' : '#1d1d1f', onClick: () => this.setState({fam:f})}; }),
       clRows: CL_ROWS.filter(r => this.state.fam==='all' || r[0]===this.state.fam).map(([f,c,n,o,p2,uk,ue]) => ({cat:c, name:n, spec: o ? o + '\npH ' + p2 : '—', use: ko ? uk : ue, form: c==='FB' ? (ko ? '500 mL · -10 °C 이하 냉동 보관 · 원산지 US' : '500 mL · Store frozen below -10 °C · Origin US') : c==='AGPBS742' ? '10X Liquid · Sterile PET bottle' : CATC[lang].cl.form})),
       rowCols: mobile ? '1fr' : '110px minmax(0,1.5fr) 170px minmax(0,1.6fr)', rowGap: mobile ? '6px' : '20px',
@@ -1612,20 +1665,20 @@ class Component extends DCLogic {
       chJump: [...CHOS[lang].map(p2 => ({label: p2.name, onClick: (e) => { e.preventDefault(); this._top(p2.id); }})), {label: ko ? 'KBIOHealth 평가' : 'KBIOHealth results', onClick: (e) => { e.preventDefault(); this._top('kbio'); }}],
       pageTabs: PAGE_ORDER.map(k => ({label: PAGES[k][lang].name, c: k===page ? '#1d1d1f' : '#1428E6', onClick: this.openPage(k)})),
       open: {cmo: this.openPage('cmo'), custom: this.openPage('custom'), analysis: this.openPage('analysis')},
-      go: {press: this.openPage('press'), proa: this.openPage('proa'), hipure: this.openPage('hipure'), denarase: this.openPage('denarase'), buffer: this.openPage('buffer'), cellc: this.openPage('cellcipient'), contactCellc: this.goContact(6), home: (e) => { e.preventDefault(); this.setState({page:null, mega:null, menu:false}, () => window.scrollTo({top:0})); }, contactCmo: this.goContact(0), cmo: this.openPage('cmo'), media: this.goHome('media'), downstream: this.goHome('downstream'), facility: this.goHome('facility'), contact: this.goHome('contact')},
+      go: {press: this.openPage('press'), proa: this.openPage('proa'), hipure: this.openPage('hipure'), denarase: this.openPage('denarase'), buffer: this.openPage('buffer'), cellc: this.openPage('cellcipient'), contactCellc: this.goContact(2), home: (e) => { e.preventDefault(); this.setState({page:null, mega:null, menu:false}, () => window.scrollTo({top:0})); }, contactCmo: this.goContact(0), cmo: this.openPage('cmo'), media: this.goHome('media'), downstream: this.goHome('downstream'), facility: this.goHome('facility'), contact: this.goHome('contact')},
       openMegaSvc: () => { if (this.state.mega!=='svc') this.setState({mega:'svc'}); }, openMegaDsp: () => { if (this.state.mega!=='dsp') this.setState({mega:'dsp'}); }, openMegaCat: () => { if (this.state.mega!=='cat') this.setState({mega:'cat'}); }, closeMega: () => { if (this.state.mega) this.setState({mega:null}); },
       megaO: mega ? 1 : 0, megaPE: mega ? 'auto' : 'none', megaH: mega ? '420px' : '0px', megaY: mega ? '0px' : '-8px', upO: megaKey==='svc' || PAGES[page] ? 1 : 0.85, catO: megaKey==='cat' || CATK.includes(page) ? 1 : 0.85,
       megaMain: PAGE_ORDER.map(k => ({label: PAGES[k][lang].name, onClick: this.openPage(k)})),
       megaCols: megaKey==='dsp' ? [
         {label: DSP[lang].proa.name, onClick: this.openPage('proa'), items: [{label: 'Puriose® ProA HP', onClick: this.openPage('proa')}, {label: ko ? '제품 사양' : 'Specifications', onClick: this.openPage('proa','proa-spec')}]},
         {label: DSP[lang].hipure.name, onClick: this.openPage('hipure'), items: [{label: 'HipureA™ Cycloid', onClick: this.openPage('hipure')}, {label: ko ? 'HCP 비교 데이터' : 'HCP data', onClick: this.openPage('hipure','hipure-data')}]},
-        {label: 'Denarase®', onClick: this.openPage('denarase'), items: [{label: ko ? 'Impurity Engineering Enzyme' : 'Impurity Engineering Enzyme', onClick: this.openPage('denarase')}, {label: ko ? '국내 공식 유통 · 구매 문의' : 'Buy in Korea', onClick: this.goContact(9)}]},
-        {label: DSP[lang].buffer.name, onClick: this.openPage('buffer'), items: [{label: ko ? '공정 맞춤 버퍼 제조' : 'Custom buffer manufacturing', onClick: this.openPage('buffer')}, {label: ko ? '버퍼 제조 문의' : 'Inquire', onClick: this.goContact(8)}]}
+        {label: 'Denarase®', onClick: this.openPage('denarase'), items: [{label: ko ? 'Impurity Engineering Enzyme' : 'Impurity Engineering Enzyme', onClick: this.openPage('denarase')}, {label: ko ? '국내 공식 유통 · 구매 문의' : 'Buy in Korea', onClick: this.goContact(3)}]},
+        {label: DSP[lang].buffer.name, onClick: this.openPage('buffer'), items: [{label: ko ? '공정 맞춤 버퍼 제조' : 'Custom buffer manufacturing', onClick: this.openPage('buffer')}, {label: ko ? '버퍼 제조 문의' : 'Inquire', onClick: this.goContact(3)}]}
       ] : megaKey==='cat' ? ((a) => [a[2],a[3],a[0],a[1],a[4]])([
         {label: CATN[lang].classical, onClick: this.openPage('classical', null, {fam:'all'}), items: FAMS.slice(1).map(f => ({label: f==='Buffer' ? 'DPBS · PBS' : f, onClick: this.openPage('classical', 'cl-list', {fam:f})}))},
-        {label: CATN[lang].customc, onClick: this.openPage('customc'), items: [{label: ko ? '조성 맞춤 소량 생산' : 'Matched small-batch production', onClick: this.openPage('customc')}, {label: ko ? '커스텀 문의하기' : 'Inquire', onClick: this.goContact(3)}]},
+        {label: CATN[lang].customc, onClick: this.openPage('customc'), items: [{label: ko ? '조성 맞춤 소량 생산' : 'Matched small-batch production', onClick: this.openPage('customc')}, {label: ko ? '커스텀 문의하기' : 'Inquire', onClick: this.goContact(2)}]},
         {label: CATN[lang].cho, onClick: this.openPage('cho'), items: CHOS[lang].map(p2 => ({label: p2.name, onClick: this.openPage('cho', p2.id)}))},
-        {label: CATN[lang].vero, onClick: this.openPage('vero'), items: [{label: ko ? '백신 생산용 차세대 CD 배지' : 'Next-gen CD medium for vaccines', onClick: this.openPage('vero')}, {label: ko ? 'Vero 배지 문의하기' : 'Inquire', onClick: this.goContact(5)}]},
+        {label: CATN[lang].vero, onClick: this.openPage('vero'), items: [{label: ko ? '백신 생산용 차세대 CD 배지' : 'Next-gen CD medium for vaccines', onClick: this.openPage('vero')}, {label: ko ? 'Vero 배지 문의하기' : 'Inquire', onClick: this.goContact(2)}]},
         {label: CATN[lang].partners, onClick: this.openPage('partners'), items: [{label: ko ? '지역별 파트너사' : 'Partners by region', onClick: this.openPage('partners', 'partner-list')}, {label: ko ? '유통 파트너 협력 문의' : 'Partnership inquiry', onClick: this.openPage('partners', 'partner-form')}]}
       ]) : PAGE_ORDER.map(k => ({label: PAGES[k][lang].name, onClick: this.openPage(k), items: PAGES[k][lang].features.map(f => ({label: f[2], onClick: this.openPage(k, f[0])}))})),
       mailList: [['order','order@amicogen.com', ko ? '문의 접수' : 'Inquiries'], ['sales','ecko@amicogen.com', ko ? '글로벌 / 국내 영업 담당자' : 'Global / Domestic Sales']].map(([k2,addr,label]) => { const c = this.state.copied===k2; return {label, addr, btn: c ? (ko ? '복사됨 ✓' : 'Copied ✓') : (ko ? '주소 복사' : 'Copy'), bg: c ? '#1428E6' : '#fff', fg: c ? '#fff' : '#1428E6', onCopy: () => this._copy(k2, addr)}; }),
@@ -1640,7 +1693,8 @@ class Component extends DCLogic {
       mediaTabs: MEDIA[lang].map((x,i) => ({short:x[0], bg: i===m ? '#1428E6' : '#F2F4FB', fg: i===m ? '#fff' : '#1d1d1f', onSelect: () => this.setState({m:i})})),
       curMedia: {name: cm[1], desc: cm[2], specs: cm[3]},
       downs: DOWNS[lang].map(([kind,name,sub,desc],i) => ({kind,name,sub,desc,...DSTYLE[i], onClick: this.openPage(DSPK[i])})),
-      areas: AREAS[lang].map((label,i) => { const a = !!areas[i]; return {label, bg: a ? '#1428E6' : '#fff', fg: a ? '#fff' : '#1d1d1f', border: a ? '#1428E6' : '#d2d2d7', onToggle: () => this.setState(s => ({areas:{...s.areas,[i]:!s.areas[i]}}))}; }),
+      areaOpen: !!this.state.areaOpen, areaRot: this.state.areaOpen ? '180deg' : '0deg', areaBorder: this.state.areaOpen ? '#1428E6' : '#d2d2d7', areaToggle: () => this.setState(s => ({areaOpen: !s.areaOpen})), areaSumC: AREAS[lang].some((_,i) => areas[i]) ? '#1d1d1f' : '#8e8e93', areaSummary: AREAS[lang].filter((_,i) => areas[i]).join(', ') || (ko ? '문의 서비스 선택 (복수 선택 가능)' : 'Select services (multiple allowed)'),
+      areas: AREAS[lang].map((label,i) => { const a = !!areas[i]; return {label, check: a ? '✓' : '', bg: a ? '#1428E6' : '#fff', fg: a ? '#fff' : '#1d1d1f', border: a ? '#1428E6' : '#c7c7cc', onToggle: () => this.setState(s => ({areas:{...s.areas,[i]:!s.areas[i]}}))}; }),
       sent, notSent: !sent, submit: (e) => this._mail(e, 'general'),
     };
   }
