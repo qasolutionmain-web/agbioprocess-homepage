@@ -1575,12 +1575,32 @@ class Component extends DCLogic {
   _pressDownload(){ const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([this._pressJson()], {type:'application/json'})); a.download = 'press.json'; a.click(); }
   async _login(e){ e.preventDefault(); const f = e.target; const s = f.elements.id.value.trim() + ':' + f.elements.pw.value;
     const d = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(s)); const hx = [...new Uint8Array(d)].map(x => x.toString(16).padStart(2,'0')).join('');
-    if (hx === 'db7921ab82b56db1f9762a3b3511509d7488bafb13f25a8a9dc53394bd6ad2aa') { sessionStorage.setItem('ag_admin','1'); this.setState({admin:true, showLogin:false, loginErr:false, page:'press'}); }
+    if (['db7921ab82b56db1f9762a3b3511509d7488bafb13f25a8a9dc53394bd6ad2aa','df8fe27df53aed6490d7e5cc2797cd15794c35a28a329c47be54736c730f9ba0'].includes(hx)) { sessionStorage.setItem('ag_admin','1'); this.setState({admin:true, showLogin:false, loginErr:false, page:'press'}); }
     else this.setState({loginErr:true}); }
+  // 뉴스룸 구글 시트: 파일 → 공유 → 웹에 게시 → 시트 선택 · CSV → 링크를 아래에 붙여넣기
+  SHEET_CSV = 'https://docs.google.com/spreadsheets/d/1RgQL0k194jyIPkwHllHwkgBbzdfsOi0C18HUt6cny8k/gviz/tq?tqx=out:csv&gid=0';
+  _csv(t){ const rows = []; let row = [], f = '', q = false;
+    for (let i = 0; i < t.length; i++) { const c = t[i];
+      if (q) { if (c === '"') { if (t[i+1] === '"') { f += '"'; i++; } else q = false; } else f += c; }
+      else if (c === '"') q = true; else if (c === ',') { row.push(f); f = ''; }
+      else if (c === '\n' || c === '\r') { if (c === '\r' && t[i+1] === '\n') i++; row.push(f); rows.push(row); row = []; f = ''; }
+      else f += c; }
+    if (f || row.length) { row.push(f); rows.push(row); } return rows; }
+  _img(u){ u = (u||'').trim(); const m = u.match(/drive\.google\.com\/(?:file\/d\/|open\?id=|uc\?.*id=)([\w-]+)/); return m ? 'https://lh3.googleusercontent.com/d/' + m[1] : u; }
+  _date(v){ v = (v||'').trim(); const m = v.match(/(\d{4})\D+(\d{1,2})\D+(\d{1,2})/); return m ? m[1] + '-' + m[2].padStart(2,'0') + '-' + m[3].padStart(2,'0') : v; }
+  async _loadPress(){
+    try { if (!this.SHEET_CSV) throw 0;
+      const t = await (await fetch(this.SHEET_CSV + (this.SHEET_CSV.includes('?') ? '&' : '?') + 't=' + Date.now())).text();
+      const [h, ...rs] = this._csv(t); const key = {'날짜':'date','제목':'title','언론사':'outlet','링크':'url','요약':'summary','이미지':'img','게시':'show'};
+      const cols = h.map(x => key[x.trim()] || x.trim().toLowerCase());
+      const press = rs.map((r, i) => { const o = {id: i + 1}; cols.forEach((c, j) => o[c] = (r[j]||'').trim()); return o; })
+        .filter(o => o.title && !/^(n|no|x|false|아니오|숨김)$/i.test(o.show||''))
+        .map(o => ({...o, date: this._date(o.date), img: this._img(o.img)})).sort((a,b) => (b.date||'').localeCompare(a.date||''));
+      this.setState({press});
+    } catch (e) { fetch('press.json?t=' + Date.now()).then(r => r.ok ? r.json() : []).then(d => Array.isArray(d) && this.setState({press:d})).catch(() => {}); } }
   goHome(id){ return (e) => { e && e.preventDefault(); this.setState({page:null, mega:null, menu:false}, () => setTimeout(() => this._top(id), 60)); }; }
   componentDidMount(){
-    fetch('press.json?t=' + Date.now()).then(r => r.ok ? r.json() : []).then(d => Array.isArray(d) && this.setState({press:d})).catch(() => {});
-    if (location.hash === '#admin') this.setState({page:'press', showLogin: !this.state.admin});
+    this._loadPress();
     this._r = () => this.setState({w: window.innerWidth}); window.addEventListener('resize', this._r);
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     const ease = 'cubic-bezier(0.25,0.1,0.25,1)';
@@ -1623,8 +1643,8 @@ class Component extends DCLogic {
     return {
       isSvcGen: !!PAGES[page] && page!=='cmo', isCmo: page==='cmo', isHome: !page, heroIn: () => this.setState({heroHover:true}), heroOut: () => this.setState({heroHover:false}),
       heroA: (this.state.heroHover && page==='custom') ? 0 : 1, heroB: (this.state.heroHover && page==='custom') ? 1 : 0, heroS: (this.state.heroHover && page==='custom') ? 1 : 1.04, isPress: page==='press', prO: page==='press' ? 1 : 0.85, navPress: ko ? '뉴스룸' : 'Newsroom',
-      pr: (() => { const s = this.state, ad = !!s.admin;
-        return {isAdmin: ad, notAdmin: !ad, showLogin: s.showLogin, loginErr: s.loginErr, empty: !s.press.length, status: s.pStatus || (ko ? '변경 후 [사이트에 게시]를 눌러주세요.' : 'Press Publish after changes.'), stC: s.pStC, token: s.ghToken, imgName: s.pImgName || (ko ? '선택된 이미지 없음' : 'No image selected'),
+      pr: (() => { const s = this.state, ad = false;
+        return {isAdmin: false, notAdmin: false, showLogin: s.showLogin, loginErr: s.loginErr, empty: !s.press.length, status: s.pStatus || (ko ? '변경 후 [사이트에 게시]를 눌러주세요.' : 'Press Publish after changes.'), stC: s.pStC, token: s.ghToken, imgName: s.pImgName || (ko ? '선택된 이미지 없음' : 'No image selected'),
           items: s.press.map(p => ({...p, img: p.img || null, url: p.url || null, editing: ad && s.editId === p.id, notEditing: !(ad && s.editId === p.id), onEdit: () => this.setState({editId: p.id}), onCancel: () => this.setState({editId: null}), onSave: (e) => this._pressSave(e, p.id), onDel: () => this.setState({press: s.press.filter(x => x.id !== p.id), pStatus: ko ? '게시 전 변경사항이 있습니다.' : 'Unpublished changes.', pStC:'#B3165E'})})),
           title: ko ? '뉴스룸' : 'Newsroom', sub: ko ? '아미코젠 바이오프로세스의 새로운 소식을 전합니다.' : 'The latest from Amicogen Bioprocess.',
           lEmpty: ko ? '등록된 기사가 없습니다.' : 'No articles yet.', lRead: ko ? '기사 보기' : 'Read article', lDel: ko ? '삭제' : 'Delete', lEdit: ko ? '수정' : 'Edit', lSave: ko ? '저장' : 'Save', lCancel: ko ? '취소' : 'Cancel', lAdminLogin: ko ? '관리자 로그인' : 'Admin login', lLogout: ko ? '로그아웃' : 'Log out',
