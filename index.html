@@ -1601,8 +1601,21 @@ class Component extends DCLogic {
       this.setState({press});
     } catch (e) { fetch('press.json?t=' + Date.now()).then(r => r.ok ? r.json() : []).then(d => Array.isArray(d) && this.setState({press:d})).catch(() => {}); } }
   goHome(id){ return (e) => { e && e.preventDefault(); this.setState({page:null, mega:null, menu:false}, () => setTimeout(() => this._top(id), 60)); }; }
+  _hashJump(){
+    const id = decodeURIComponent((location.hash || '').slice(1)); if (!id || id === 'admin') return;
+    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+    const go = () => { const el = document.getElementById(id); if (!el) return false;
+      window.scrollTo({top: el.getBoundingClientRect().top + window.scrollY - (this.state.page ? 112 : 52), behavior: 'auto'}); return true; };
+    if (this.state.page) this.setState({page:null});
+    let n = 0; const t0 = Date.now(); let userMoved = false;
+    const stop = () => { userMoved = true; }; ['wheel','touchstart','keydown'].forEach(ev => window.addEventListener(ev, stop, {once:true, passive:true}));
+    const tick = () => { if (userMoved) return; go(); if (Date.now() - t0 < 2500) setTimeout(tick, n++ < 10 ? 80 : 250); };
+    requestAnimationFrame(tick);
+    window.addEventListener('load', () => { if (!userMoved) go(); }, {once:true});
+  }
   componentDidMount(){
     this._loadPress();
+    this._hashJump(); this._hc = () => this._hashJump(); window.addEventListener('hashchange', this._hc);
     this._r = () => this.setState({w: window.innerWidth}); window.addEventListener('resize', this._r);
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     const ease = 'cubic-bezier(0.25,0.1,0.25,1)';
