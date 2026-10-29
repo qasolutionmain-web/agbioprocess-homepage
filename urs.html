@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>AGMD Customized Media Development Questionnaire (URS) · Amicogen</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+html{scroll-behavior:smooth}
+body{margin:0;background:#F5F6FA;color:#1d1d1f;font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFont,system-ui,sans-serif;-webkit-font-smoothing:antialiased;word-break:keep-all;letter-spacing:-0.01em}
+*{box-sizing:border-box}
+a{color:#1428E6;text-decoration:none}
+a:hover{text-decoration:underline}
+button,input,textarea{font-family:inherit}
+textarea:focus,input:focus{border-color:#1428E6 !important;box-shadow:0 0 0 4px rgba(20,40,230,0.12)}
+</style>
+</helmet>
+<sc-if value="{{ locked }}" hint-placeholder-val="{{ false }}">
+  <div style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:22px;background:#F2F4FB">
+    <form onSubmit="{{ unlock }}" style="background:rgba(255,255,255,0.8);backdrop-filter:blur(24px) saturate(160%);-webkit-backdrop-filter:blur(24px) saturate(160%);border:1px solid #fff;border-radius:24px;box-shadow:0 24px 64px rgba(20,40,230,0.1);padding:32px;width:100%;max-width:380px;display:flex;flex-direction:column;gap:12px">
+      <img src="assets/logo-ppt.png" alt="AMICOGEN" style="height:22px;align-self:flex-start;margin-bottom:8px">
+      <span style="font-size:24px;font-weight:700;letter-spacing:-0.02em">{{ u.gateTitle }}</span>
+      <span style="font-size:14px;color:#6e6e73;line-height:1.5">{{ u.gateSub }}</span>
+      <input name="pw" type="password" required autofocus autocomplete="off" placeholder="{{ u.pw }}" style="height:48px;border:1px solid #d2d2d7;border-radius:12px;padding:0 14px;font-size:16px;outline:none;background:#fff">
+      <sc-if value="{{ pwErr }}" hint-placeholder-val="{{ false }}"><span style="font-size:13px;color:#d70015">{{ u.pwErr }}</span></sc-if>
+      <button type="submit" style="height:48px;border:0;border-radius:980px;background:#1428E6;color:#fff;font-size:16px;font-weight:600;cursor:pointer;margin-top:4px">{{ u.open }}</button>
+    </form>
+  </div>
+</sc-if>
+<sc-if value="{{ unlocked }}" hint-placeholder-val="{{ true }}">
+  <header style="position:sticky;top:0;z-index:50;background:rgba(255,255,255,0.78);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);border-bottom:1px solid rgba(0,0,0,0.08)">
+    <div style="max-width:960px;margin:0 auto;padding:0 22px;height:56px;display:flex;align-items:center;justify-content:space-between;gap:16px">
+      <img src="assets/logo-ppt.png" alt="AMICOGEN" style="height:20px;display:block">
+      <div style="display:flex;align-items:center;gap:12px;font-size:13px;color:#6e6e73">
+        <sc-if value="{{ hasSaved }}" hint-placeholder-val="{{ false }}"><span style="color:#1428E6">{{ savedLabel }}</span></sc-if>
+        <span>{{ done }} / {{ total }} {{ u.answered }}</span>
+        <button type="button" onClick="{{ toggleLang }}" style="border:0;background:transparent;cursor:pointer;font-size:13px;color:#1d1d1f;padding:8px 4px;display:flex;gap:6px;align-items:center"><span style="font-weight:{{ koW }};opacity:{{ koO }}">KO</span><span style="opacity:0.3">/</span><span style="font-weight:{{ enW }};opacity:{{ enO }}">EN</span></button>
+        <div style="width:72px;height:6px;border-radius:3px;background:#E6E9FD;overflow:hidden"><div style="height:100%;width:{{ pct }};background:#1428E6;border-radius:3px;transition:width 0.3s ease"></div></div>
+      </div>
+    </div>
+    <nav style="max-width:960px;margin:0 auto;padding:0 22px 10px;display:flex;gap:6px;overflow-x:auto;scrollbar-width:none">
+      <sc-for list="{{ sections }}" as="s" hint-placeholder-count="6">
+        <a href="{{ s.href }}" style="flex-shrink:0;font-size:13px;padding:6px 12px;border-radius:980px;background:{{ s.chipBg }};color:{{ s.chipFg }};font-weight:{{ s.chipW }};text-decoration:none;white-space:nowrap;display:flex;align-items:center;gap:6px;transition:background 0.25s,color 0.25s" style-hover="text-decoration:none;filter:brightness(0.97)"><sc-if value="{{ s.complete }}" hint-placeholder-val="{{ false }}"><span style="width:16px;height:16px;border-radius:50%;background:#5A8A00;color:#fff;font-size:10px;display:flex;align-items:center;justify-content:center">✓</span></sc-if>{{ s.n }}. {{ s.short }}<span style="font-size:11px;opacity:0.7">{{ s.prog }}</span></a>
+      </sc-for>
+    </nav>
+  </header>
+  <sc-if value="{{ notSent }}" hint-placeholder-val="{{ true }}">
+  <main style="max-width:960px;margin:0 auto;padding:clamp(48px,7vw,88px) 22px 220px">
+    <div style="display:flex;flex-direction:column;gap:14px;margin-bottom:clamp(40px,6vw,64px)">
+      <span style="font-size:15px;font-weight:600;color:#1428E6">AGMD · User Requirement Specification</span>
+      <h1 style="margin:0;font-size:clamp(32px,5vw,52px);line-height:1.1;letter-spacing:-0.03em;font-weight:700;text-wrap:balance">{{ u.h1 }}</h1>
+      <p style="margin:0;max-width:760px;font-size:clamp(16px,1.6vw,19px);line-height:1.6;color:#424245;text-wrap:pretty;white-space:pre-line">{{ u.intro }}</p>
+    </div>
+    <form onSubmit="{{ submit }}" style="display:flex;flex-direction:column;gap:clamp(40px,6vw,64px)">
+      <sc-for list="{{ sections }}" as="s" hint-placeholder-count="6">
+        <section id="{{ s.id }}" style="scroll-margin-top:120px;display:flex;flex-direction:column;gap:14px">
+          <div style="display:flex;align-items:baseline;gap:12px;padding:0 4px 6px">
+            <span style="font-size:13px;font-weight:600;color:#1428E6;letter-spacing:0.02em">{{ u.section }} {{ s.n }}</span>
+            <h2 style="margin:0;font-size:clamp(22px,2.6vw,28px);letter-spacing:-0.02em;font-weight:700">{{ s.title }}</h2>
+            <sc-if value="{{ s.complete }}" hint-placeholder-val="{{ false }}"><span style="align-self:center;display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:#5A8A00;background:#EEF6DC;padding:4px 10px 4px 6px;border-radius:980px"><span style="width:18px;height:18px;border-radius:50%;background:#5A8A00;color:#fff;font-size:11px;display:flex;align-items:center;justify-content:center">✓</span>{{ u.complete }}</span></sc-if>
+          </div>
+          <div style="background:#fff;border-radius:22px;box-shadow:0 1px 2px rgba(0,0,0,0.04),0 8px 28px rgba(20,40,230,0.05);overflow:hidden">
+            <sc-for list="{{ s.qs }}" as="q" hint-placeholder-count="4">
+              <label style="display:grid;grid-template-columns:36px minmax(0,1fr);gap:4px 14px;padding:22px clamp(18px,3vw,28px);border-top:{{ q.border }}">
+                <span style="width:30px;height:30px;border-radius:50%;background:{{ q.badgeBg }};color:{{ q.badgeFg }};font-size:13px;font-weight:600;display:flex;align-items:center;justify-content:center;transition:background 0.2s">{{ q.n }}</span>
+                <span style="font-size:16px;line-height:1.5;font-weight:500;color:#1d1d1f;padding-top:4px;text-wrap:pretty">{{ q.text }}</span>
+                <span></span>
+                <textarea value="{{ q.val }}" onChange="{{ q.onChange }}" rows="{{ q.rows }}" placeholder="{{ u.ph }}" style="margin-top:10px;width:100%;border:1px solid #d2d2d7;border-radius:12px;padding:12px 14px;font-size:15px;line-height:1.5;resize:vertical;outline:none;background:#FBFBFD;color:#1d1d1f;transition:border-color 0.2s,box-shadow 0.2s"></textarea>
+              </label>
+            </sc-for>
+          </div>
+        </section>
+      </sc-for>
+        <div style="position:fixed;right:clamp(12px,2.5vw,28px);bottom:clamp(12px,2.5vw,28px);z-index:60;display:flex;flex-direction:column;gap:8px;padding:10px;border-radius:20px;background:rgba(255,255,255,0.72);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);border:1px solid rgba(255,255,255,0.9);box-shadow:0 12px 40px rgba(20,40,230,0.14),0 2px 8px rgba(0,0,0,0.06)">
+          <sc-if value="{{ hasSaved }}" hint-placeholder-val="{{ false }}"><span style="font-size:12px;color:#1428E6;text-align:center;padding:2px 0">{{ savedLabel }}</span></sc-if>
+          <button type="button" onClick="{{ saveNow }}" style="height:40px;padding:0 18px;border:0;border-radius:980px;background:#1428E6;color:#fff;font-size:14px;font-weight:600;cursor:pointer;white-space:nowrap" style-hover="background:#0E1DB8">{{ u.save }}</button>
+          <button type="button" onClick="{{ exportFile }}" style="height:40px;padding:0 18px;border:1px solid #d2d2d7;border-radius:980px;background:#fff;color:#1d1d1f;font-size:14px;cursor:pointer;white-space:nowrap" style-hover="background:#F5F5F7">{{ u.exp }}</button>
+          <label style="height:40px;padding:0 18px;border:1px solid #d2d2d7;border-radius:980px;background:#fff;color:#1d1d1f;font-size:14px;cursor:pointer;white-space:nowrap;display:flex;align-items:center;justify-content:center" style-hover="background:#F5F5F7">{{ u.imp }}<input type="file" accept=".json,application/json" onChange="{{ importFile }}" style="display:none"></label>
+        </div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:14px;text-align:center;padding-top:8px">
+        <sc-if value="{{ needCompany }}" hint-placeholder-val="{{ false }}"><span style="font-size:14px;color:#d70015">{{ u.need }}</span></sc-if>
+        <span style="font-size:13px;color:#6e6e73;max-width:520px;line-height:1.5">{{ u.saveNote }}</span>
+        <button type="submit" disabled="{{ sending }}" style="height:52px;padding:0 36px;border:0;border-radius:980px;background:#1428E6;color:#fff;font-size:17px;font-weight:600;cursor:pointer" style-hover="background:#0E1DB8">{{ submitLabel }}</button>
+        <span style="font-size:13px;color:#6e6e73">{{ u.foot }} <a href="mailto:order@amicogen.com">order@amicogen.com</a></span>
+      </div>
+    </form>
+  </main>
+  </sc-if>
+  <sc-if value="{{ sent }}" hint-placeholder-val="{{ false }}">
+    <main style="max-width:640px;margin:0 auto;padding:clamp(80px,12vw,140px) 22px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:16px">
+      <div style="width:64px;height:64px;border-radius:50%;background:#1428E6;color:#fff;display:flex;align-items:center;justify-content:center;font-size:30px">✓</div>
+      <h1 style="margin:0;font-size:clamp(28px,4vw,40px);letter-spacing:-0.03em">{{ u.sentT }}</h1>
+      <p style="margin:0;font-size:17px;line-height:1.6;color:#424245">{{ u.sentS }}</p>
+      <button type="button" onClick="{{ again }}" style="margin-top:8px;height:44px;padding:0 22px;border:1px solid #1428E6;border-radius:980px;background:transparent;color:#1428E6;font-size:15px;cursor:pointer">{{ u.edit }}</button>
+    </main>
+  </sc-if>
+</sc-if>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const SECTIONS = [{"n":1,"title":"General Project & Contact Information","qs":[[1,"Company Name / Organization"],[2,"Project Lead / Contact Person / Contact"],[3,"Target timeline for prototype delivery, scale-up, and commercial manufacturing"],[4,"Project Scope (Basal media, Feed media, Basal + Feed (or any other buffer or supplement?)"],[5,"Regulatory & Quality Requirements: What are the intended use and regulatory standards for the final product (e.g., Research Use Only, GMP-compliant, Phase I/II/III clinical, or Commercial)?"]]},{"n":2,"title":"Cell Line & Host Information","qs":[[6,"Host Cell Line Origin, specific sub-type, source of cell bank (CHO-K1, CHO-S, CHO-DG44, HEK293T, HEK293F, Vero etc. from ATCC, ECACC, in-house engineered)"],[7,"How are the cells engineered or modified (e.g., knockouts, overexpressed enzymes, gene-edited for glycosylation pathways)?"],[8,"What is the typical population doubling time during the exponential growth phase in your current process?"],[9,"Does the cell line require specific selection agents (e.g., MSX for GS-systems, puromycin, hygromycin, methotrexate)?"]]},{"n":3,"title":"Current Process & Media Baseline","qs":[[10,"What commercial or in-house basal medium are you currently using and what is performance or quality limitations with your current media?"],[11,"What commercial or in-house feed medium are you currently using and what is performance or quality limitations with your current media?"],[12,"What culture mode do you use (flask, bioreactor) and what is the culture conditions (CO2 concentration, RPM, seeding density)?"],[13,"What is the feeding schedule (e.g., bolus daily, every 48h, or perfusion)?"],[14,"Do you supplement with L-glutamine, recombinant insulin, hydrolysates, antifoam, or other specialized growth factors?"],[15,"Is your current process serum-free, protein-free, or chemically defined? What is the target?"],[16,"What are your current typical values for Peak Cell Density (PCD), Viability longevity, and Final Titer? Could you share current performance data?"]]},{"n":4,"title":"Culture & Monitoring Details","qs":[[17,"Do you implement a temperature shift strategy during the production phase (e.g., from 37.0°C down to 32.0–34.0°C)? If so, at what day/viability?"],[18,"What is the typical operating pH setpoint range and deadband, and what base/acid agents are used for control (e.g., Na2CO3, NaOH, CO2)?"],[19,"What is your starting osmolality and the maximum allowable osmolality threshold at harvest (mOsm/kg)?"],[20,"What is the target DO setpoint (% of air saturation) during growth and production phases?"],[21,"Do you monitor dissolved dCO2 and pO2 profiles throughout the run?"],[22,"What are your standard sparge types (microsparge vs. drilled hole) and agitation parameters to control shear stress?"],[23,"Do you routinely use antifoam? What type and maximum concentration?"],[24,"Which metabolites do you monitor daily or regularly offline (e.g., Glucose, Lactate, Glutamine, Glutamate, Ammonium)?"],[25,"Do you track alternative carbon sources such as galactose, mannose, or specific amino acid profiles?"],[26,"Do you require specific profiling or control limits for trace metals (e.g., iron, copper, zinc, manganese) via ICP-MS?"]]},{"n":5,"title":"Target Details","qs":[[27,"What is your target peak viable cell density?"],[28,"What is the intended total culture duration (e.g., 10 days, 14 days, 21+ days for perfusion)?"],[29,"How many days do you aim to maintain >80% or >50% cell viability in culture?"],[30,"What type of molecule is being expressed (e.g., Monoclonal Antibody [mAb], Bispecific Antibody, Fc-fusion protein, Recombinant Enzyme, Viral Vector [AAV/Lentivirus])?"],[31,"What is your target volumetric titer (mg/L or g/L) at harvest or specific productivity per cell per day (e.g., pg/cell/day)?"],[32,"Is there specific targets for glycan distribution (e.g., maximizing G0F/G1F/G2F, minimizing high mannose species, controlling afucosylation or sialylation)?"],[33,"What are your targets for acidic, main, and basic peaks (e.g., as measured by icIEF or IEC-HPLC)?"],[34,"What is your acceptable upper limit for high molecular weight (HMW) aggregates (SEC-HPLC)?"],[35,"What is your acceptable limit for low molecular weight (LMW) fragments or cleaved species?"],[36,"Do you track HCP/DNA clearance trends as a function of media formulation?"],[37,"Are there concerns regarding product stability, clipping, or incorrect disulfide bonding influenced by media components?"]]},{"n":6,"title":"Formulation, Packaging & Manufacturing Preferences","qs":[[38,"Do you prefer the final prototype delivered as liquid (1X, 10X concentrate) or as a homogenous Dry Powder Medium (DPM)?"],[39,"Are there specific water quality requirements (e.g., WFI) or mixing vessel limitations in your facility?"],[40,"What requirements do you have for complete dissolution without residue at high concentrations (for feed media)?"],[41,"Is there any packaging type you would prefer (e.g., HDPE bottles, multi-layer foil bags, LDPE inner liners, customized batch sizes)?"],[42,"What are your storage temperature requirements and minimum acceptable shelf-life for the manufactured media?"],[43,"Do you have specific Certificates of Analysis (CoA) parameters and specifications required for each media lot (e.g., moisture content, particle size distribution, solubility test, pH, osmolality, endotoxin, bioburden)?"]]}];
+const SHORT = ['Project & Contact','Cell Line','Current Process','Culture & Monitoring','Targets','Formulation & Packaging'];
+const KO_T = ["프로젝트 및 연락처 정보","세포주 및 숙주 정보","현재 공정 및 배지 현황","배양 및 모니터링 상세","목표 사양","제형 · 포장 · 생산 선호사항"];
+const KO_S = ["프로젝트·연락처","세포주","현재 공정","배양·모니터링","목표 사양","제형·포장"];
+const KO_Q = ["회사명 / 기관명","프로젝트 책임자 / 담당자 / 연락처","시제품 납품, 스케일업, 상업 생산까지의 목표 일정","프로젝트 범위 (기초배지, 피드배지, 기초배지 + 피드, 또는 기타 버퍼·보충제)","규제 및 품질 요건: 최종 제품의 용도와 적용 규제 기준은 무엇입니까? (예: 연구용(RUO), GMP 준수, 임상 1/2/3상, 상업용)","숙주 세포주의 유래, 세부 아형, 세포은행 출처 (CHO-K1, CHO-S, CHO-DG44, HEK293T, HEK293F, Vero 등 / ATCC, ECACC, 자체 엔지니어링)","세포는 어떻게 엔지니어링 또는 변형되었습니까? (예: 유전자 녹아웃, 효소 과발현, 당쇄화 경로 유전자 편집)","현재 공정의 대수 증식기 평균 집단 배가 시간(doubling time)은 얼마입니까?","세포주에 특정 선택 약물이 필요합니까? (예: GS 시스템용 MSX, puromycin, hygromycin, methotrexate)","현재 사용 중인 상용 또는 자체 기초배지는 무엇이며, 성능이나 품질 측면의 한계는 무엇입니까?","현재 사용 중인 상용 또는 자체 피드배지는 무엇이며, 성능이나 품질 측면의 한계는 무엇입니까?","배양 방식(플라스크, 바이오리액터)과 배양 조건(CO2 농도, RPM, 접종 밀도)은 어떻게 됩니까?","피딩 스케줄은 어떻게 됩니까? (예: 매일 bolus, 48시간 간격, perfusion)","L-glutamine, 재조합 insulin, hydrolysate, antifoam 또는 기타 특수 성장인자를 보충합니까?","현재 공정은 무혈청, 무단백, 화학조성 명확(CD) 중 어디에 해당합니까? 목표는 무엇입니까?","현재 최대 세포 밀도(PCD), 생존율 유지 기간, 최종 역가의 일반적인 수치는 어떻게 됩니까? 현재 성능 데이터를 공유해 주실 수 있습니까?","생산 단계에서 온도 shift 전략을 적용합니까? (예: 37.0°C → 32.0–34.0°C) 적용한다면 어느 시점(일차/생존율)에 합니까?","일반적인 pH 설정 범위와 deadband는 어떻게 되며, 제어에 사용하는 염기/산은 무엇입니까? (예: Na2CO3, NaOH, CO2)","초기 삼투압과 수확 시 허용 최대 삼투압(mOsm/kg)은 얼마입니까?","증식 및 생산 단계의 목표 DO 설정값(공기 포화 대비 %)은 얼마입니까?","배양 전 과정에서 dCO2와 pO2 프로파일을 모니터링합니까?","표준 sparger 형태(microsparge / drilled hole)와 전단 응력 제어를 위한 교반 조건은 어떻게 됩니까?","antifoam을 일상적으로 사용합니까? 종류와 최대 농도는 무엇입니까?","매일 또는 정기적으로 오프라인 모니터링하는 대사물질은 무엇입니까? (예: Glucose, Lactate, Glutamine, Glutamate, Ammonium)","galactose, mannose 등 대체 탄소원이나 특정 아미노산 프로파일을 추적합니까?","ICP-MS를 통한 미량 금속(예: 철, 구리, 아연, 망간)의 프로파일링 또는 관리 기준이 필요합니까?","목표 최대 생세포 밀도는 얼마입니까?","계획된 총 배양 기간은 얼마입니까? (예: 10일, 14일, perfusion 21일 이상)","배양 중 생존율 80% 이상 또는 50% 이상을 며칠간 유지하는 것이 목표입니까?","발현하는 분자의 종류는 무엇입니까? (예: 단일클론항체(mAb), 이중특이항체, Fc 융합단백질, 재조합 효소, 바이러스 벡터(AAV/Lentivirus))","수확 시 목표 용적 역가(mg/L 또는 g/L) 또는 세포당 일일 비생산성(pg/cell/day)은 얼마입니까?","당쇄 분포에 대한 특정 목표가 있습니까? (예: G0F/G1F/G2F 극대화, high mannose 최소화, afucosylation 또는 sialylation 제어)","산성, 주, 염기성 피크에 대한 목표는 무엇입니까? (예: icIEF 또는 IEC-HPLC 측정 기준)","고분자량(HMW) 응집체의 허용 상한(SEC-HPLC)은 얼마입니까?","저분자량(LMW) 절편 또는 절단 산물의 허용 기준은 얼마입니까?","배지 조성에 따른 HCP/DNA 제거 경향을 추적합니까?","배지 성분에 영향을 받는 제품 안정성, clipping, 잘못된 이황화 결합 등에 대한 우려가 있습니까?","최종 시제품을 액상(1X, 10X 농축)으로 받기를 원하십니까, 균질한 분말배지(DPM)로 받기를 원하십니까?","시설 내 특정 용수 품질 요건(예: WFI)이나 혼합 용기 제약이 있습니까?","고농도(피드배지)에서 잔여물 없는 완전 용해에 대한 요건은 무엇입니까?","선호하는 포장 형태가 있습니까? (예: HDPE 병, 다층 알루미늄 백, LDPE 내포장, 맞춤 배치 크기)","생산된 배지의 보관 온도 요건과 최소 허용 유효기간은 어떻게 됩니까?","각 배지 로트별로 요구하는 CoA 항목과 규격이 있습니까? (예: 수분 함량, 입도 분포, 용해도 시험, pH, 삼투압, 엔도톡신, 바이오버든)"];
+const U = {
+  en:{gateTitle:'Custom Media URS', gateSub:'Enter the password provided by Amicogen to access the questionnaire.', pw:'Password', pwErr:'Incorrect password.', open:'Open questionnaire', answered:'answered', section:'SECTION', h1:'Customized Media Development Questionnaire', intro:'Please share as much detail as you can.\nYour answers help us design a medium for your cell line, process and quality targets.\nAnswers are saved in this browser as you type, so you can come back later.\nYou can also save, download and load drafts from the panel at the bottom right.', ph:'Your answer', complete:'Complete', save:'Save draft', exp:'Download draft file', imp:'Load draft file', saved:'Saved', saveNote:'Answers are saved automatically in this browser on this PC. To continue on another computer, download the draft file and load it there.', badFile:'This file could not be read.', need:'Please fill in at least Q1 (Company) and Q2 (Contact) so we can reply.', submit:'Submit URS', sending:'Submitting…', foot:'Your responses go directly to the Amicogen Bioprocess team. Questions:', sentT:'Thank you. We’ve received your URS.', sentS:'Our team will review your requirements and get back to you within 1–2 business days.', edit:'Edit my answers', fail:'Submission failed. Please check your connection and try again.'},
+  ko:{gateTitle:'맞춤형배지 표준 URS', gateSub:'아미코젠에서 전달받은 비밀번호를 입력하면 설문지를 작성할 수 있습니다.', pw:'비밀번호', pwErr:'비밀번호가 올바르지 않습니다.', open:'설문지 열기', answered:'문항 작성', section:'SECTION', h1:'맞춤형 배지 개발 설문지', intro:'가능한 한 자세히 작성해주세요.\n답변을 바탕으로 고객의 세포주, 공정, 품질 목표에 맞는 배지를 설계합니다.\n입력한 내용은 이 브라우저에 자동 저장되어 나중에 이어서 작성할 수 있습니다.\n오른쪽 하단에서 임시저장, 불러오기 기능 또한 사용할 수 있습니다.', ph:'답변을 입력하세요', complete:'작성 완료', save:'임시 저장', exp:'작성 파일 내려받기', imp:'작성 파일 불러오기', saved:'저장됨', saveNote:'작성 내용은 이 PC의 브라우저에 자동 저장됩니다. 다른 컴퓨터에서 이어서 작성하려면 작성 파일을 내려받아 해당 PC에서 불러오세요.', badFile:'파일을 읽을 수 없습니다.', need:'회신을 위해 최소한 1번(회사명)과 2번(담당자·연락처)은 입력해 주세요.', submit:'URS 제출하기', sending:'제출 중…', foot:'제출하신 내용은 아미코젠 바이오프로세스 팀에 바로 전달됩니다. 문의:', sentT:'URS가 접수되었습니다.', sentS:'담당자가 요구사항을 검토한 후 영업일 기준 1~2일 내 회신드리겠습니다.', edit:'답변 수정하기', fail:'제출에 실패했습니다. 네트워크 연결을 확인한 후 다시 시도해 주세요.'}
+};
+const detectLang = () => { try { const q = new URLSearchParams(location.search).get('lang'); if (q === 'ko' || q === 'en') return q; const s = localStorage.getItem('ag_lang'); if (s === 'ko' || s === 'en') return s; const L = navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || '']; return L.some(x => /^ko\b/i.test(x)) ? 'ko' : 'en'; } catch (_) { return 'en'; } };
+const PW = 'agmd2026';
+// 구글 폼 연결: 폼의 "미리 채워진 링크"를 붙여넣기 (각 답변을 Q1, Q2 … Q43 으로 채워서 생성)
+const PREFILL_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSfaaTeaoM2r2edD7O00KjE_qh22ONQRRAnCKn-KKRBFxN0GhA/viewform?usp=pp_url&entry.998633693=Q1&entry.1456548559=Q2&entry.211976856=Q3&entry.268854373=Q4&entry.1606662365=Q5&entry.1701552527=Q6&entry.394222578=Q7&entry.1856764530=Q8&entry.1519605002=Q9&entry.2028722479=Q10&entry.1905761498=Q11&entry.1779291009=Q12&entry.1311519920=Q13&entry.638342736=Q14&entry.915761343=Q15&entry.1317094117=Q16&entry.354221585=Q17&entry.2042775270=Q18&entry.628784160=Q19&entry.2071066205=Q20&entry.312881322=Q21&entry.647291947=Q22&entry.1435815127=Q23&entry.336327761=Q24&entry.1441701501=Q25&entry.638205102=Q26&entry.1843931090=Q27&entry.2095071266=Q28&entry.1370394489=Q29&entry.869475740=Q30&entry.195904103=Q31&entry.2079950387=Q32&entry.1214330718=Q33&entry.2035955119=Q34&entry.1048931190=Q35&entry.1203157433=Q36&entry.2140877859=Q37&entry.1155740956=Q38&entry.1352037517=Q39&entry.1600968511=Q40&entry.264753552=Q41&entry.1028941264=Q42&entry.1178512421=Q43';
+class Component extends DCLogic {
+  state = { lang: detectLang(), savedAt: null, ans: {}, ok: false, pwErr: false, sent: false, sending: false, needCompany: false };
+  componentDidMount(){
+    let ok = false; try { ok = +localStorage.getItem('ag_urs') > Date.now(); } catch (_) {}
+    let ans = {}, savedAt = null; try { ans = JSON.parse(localStorage.getItem('ag_urs_draft') || '{}'); savedAt = +localStorage.getItem('ag_urs_saved') || null; } catch (_) {}
+    document.documentElement.lang = this.state.lang;
+    this.setState({ok, ans, savedAt});
+  }
+  _form(){ const m = PREFILL_URL.match(/forms\/d\/e\/([\w-]+)/); if (!m) return null;
+    const map = {}; for (const x of PREFILL_URL.matchAll(/(entry\.\d+)=Q(\d+)/g)) map[x[2]] = x[1];
+    return {action: 'https://docs.google.com/forms/d/e/' + m[1] + '/formResponse', map}; }
+  _persist(ans){ const t = Date.now(); try { localStorage.setItem('ag_urs_draft', JSON.stringify(ans)); localStorage.setItem('ag_urs_saved', String(t)); } catch (_) {} return t; }
+  _set(n, v){ this.setState(s => { const ans = {...s.ans, [n]: v}; return {ans, savedAt: this._persist(ans), needCompany:false}; }); }
+  _export(){ const a = this.state.ans, name = (a[1] || 'draft').trim().replace(/[^\w가-힣-]+/g, '_').slice(0, 40);
+    const blob = new Blob([JSON.stringify({type:'AGMD-URS', v:1, savedAt: new Date().toISOString(), answers: a}, null, 2)], {type:'application/json'});
+    const url = URL.createObjectURL(blob), el = document.createElement('a'); el.href = url; el.download = 'AGMD_URS_' + name + '.json'; document.body.appendChild(el); el.click(); el.remove(); setTimeout(() => URL.revokeObjectURL(url), 1000); }
+  _import(e){ const file = e.target.files && e.target.files[0]; e.target.value = ''; if (!file) return;
+    file.text().then(t => { const d = JSON.parse(t), ans = d && d.answers; if (!ans || typeof ans !== 'object') throw 0; this.setState({ans, savedAt: this._persist(ans)}); })
+      .catch(() => alert(U[this.state.lang].badFile)); }
+  _submit(e){ e.preventDefault(); const a = this.state.ans, g = n => (a[n] || '').trim();
+    if (!g(1) || !g(2)) { this.setState({needCompany:true}); window.scrollTo({top:0, behavior:'smooth'}); return; }
+    const f = this._form(); const all = SECTIONS.flatMap(s => s.qs);
+    if (!f) { const body = SECTIONS.map(s => 'Section ' + s.n + ': ' + s.title + '\n' + s.qs.map(([n,t]) => n + '. ' + t + '\n→ ' + (g(n) || '-')).join('\n')).join('\n\n');
+      location.href = 'mailto:order@amicogen.com?subject=' + encodeURIComponent('[URS] ' + g(1)) + '&body=' + encodeURIComponent(body); this.setState({sent:true}); return; }
+    const fd = new URLSearchParams(); all.forEach(([n]) => { if (f.map[n]) fd.append(f.map[n], g(n)); });
+    this.setState({sending:true});
+    fetch(f.action, {method:'POST', mode:'no-cors', body: fd}).then(() => { this.setState({sent:true, sending:false}); window.scrollTo(0,0); })
+      .catch(() => { this.setState({sending:false}); alert(U[this.state.lang].fail); });
+  }
+  renderVals(){
+    const lang = this.state.lang, ko = lang === 'ko', u = U[lang];
+    const a = this.state.ans, total = SECTIONS.reduce((x,s) => x + s.qs.length, 0);
+    const done = Object.values(a).filter(v => (v || '').trim()).length;
+    return {
+      u, koW: ko ? 600 : 400, koO: ko ? 1 : 0.45, enW: ko ? 400 : 600, enO: ko ? 0.45 : 1,
+      toggleLang: () => { const nl = ko ? 'en' : 'ko'; try { localStorage.setItem('ag_lang', nl); } catch (_) {} document.documentElement.lang = nl; this.setState({lang: nl}); },
+      hasSaved: !!this.state.savedAt, savedLabel: this.state.savedAt ? u.saved + ' · ' + new Date(this.state.savedAt).toLocaleTimeString(ko ? 'ko-KR' : 'en-US', {hour:'2-digit', minute:'2-digit'}) : '',
+      saveNow: () => this.setState(s => ({savedAt: this._persist(s.ans)})), exportFile: () => this._export(), importFile: (e) => this._import(e),
+      locked: !this.state.ok, unlocked: this.state.ok, pwErr: this.state.pwErr,
+      unlock: (e) => { e.preventDefault(); if ((e.target.pw.value || '').trim() === PW) { try { localStorage.setItem('ag_urs', String(Date.now() + 12*3600e3)); } catch (_) {} this.setState({ok:true, pwErr:false}); } else this.setState({pwErr:true}); },
+      total, done, pct: Math.round(done / total * 100) + '%',
+      sections: SECTIONS.map((s, si) => { const fill = s.qs.filter(([n]) => (a[n] || '').trim()).length, full = fill === s.qs.length; return {complete: full, prog: full ? '' : fill + '/' + s.qs.length, chipBg: full ? '#EEF6DC' : '#F2F4FB', chipFg: full ? '#5A8A00' : '#1d1d1f', chipW: full ? 600 : 400, n: s.n, title: ko ? KO_T[si] : s.title, short: ko ? KO_S[si] : SHORT[si], id: 'sec' + s.n, href: '#sec' + s.n,
+        qs: s.qs.map(([n, text], qi) => { const v = a[n] || '', has = !!v.trim();
+          return {n, text: ko ? KO_Q[n-1] : text, val: v, rows: n <= 2 ? 1 : 3, border: qi ? '1px solid #EEF0F5' : '0', badgeBg: has ? '#5A8A00' : '#E6E9FD', badgeFg: has ? '#fff' : '#1428E6', onChange: (e) => this._set(n, e.target.value)}; })}; }),
+      sent: this.state.sent, notSent: !this.state.sent, sending: this.state.sending, needCompany: this.state.needCompany,
+      submitLabel: this.state.sending ? u.sending : u.submit,
+      submit: (e) => this._submit(e), again: () => this.setState({sent:false}),
+    };
+  }
+}
+</script>
+</body>
+</html>
